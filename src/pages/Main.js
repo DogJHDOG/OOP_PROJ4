@@ -1,6 +1,5 @@
 import React from 'react';
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
-import { Eventcalendar, getJson, setOptions } from '@mobiscroll/react';
 import styled from 'styled-components';
 
 import FullCalendar from '@fullcalendar/react'
@@ -10,15 +9,7 @@ import Notice from '../components/Notice';
 
 
 function Main() {
-    // const [myEvents, setEvents] = React.useState([]);
-    
-    // React.useEffect(() => {
-    //     getJson('https://trial.mobiscroll.com/events/?vers=5', (events) => {
-    //         setEvents(events);
-    //     }, 'jsonp');
-    // }, []);
 
-    
     
     
     return (
@@ -26,10 +17,6 @@ function Main() {
         <Title>
             2023.2 Object Oriented Programming
         </Title>
-        {/* <Eventcalendar
-            data={myEvents}
-            colors={myColors}
-        /> */}
 
         <FullCalendar
                 plugins={[ dayGridPlugin ]}
