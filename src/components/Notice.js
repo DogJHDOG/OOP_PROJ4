@@ -13,10 +13,10 @@ const Content = styled.div`
   margin-top: 16px; /* 콘텐츠 위에 간격 추가 */
 `;
 
-const Notice = () => {
+const Notice = ({ onClick }) => {
   return (
     <div>
-      <Title>
+      <Title onClick={onClick}>
         Project 4
       </Title>
       <Content>
