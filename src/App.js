@@ -5,7 +5,6 @@ import Main from './pages/Main';
 import Example from './pages/Example';
 import NoticePage from './pages/NoticePage';
 import Login from './pages/Login';
-import CreatePage from './pages/CreatePage';
 
 const App = () => {
   return (

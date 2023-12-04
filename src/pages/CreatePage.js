@@ -85,7 +85,6 @@ function CreatePage() {
 
        ></input></Title>
       <Editor
-        name='Body'
         editorState={editorState}
         toolbarClassName="toolbarClassName"
         wrapperClassName="wrapperClassName"
