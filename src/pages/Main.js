@@ -5,7 +5,6 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 
 import Notice from '../components/Notice';
 import 'tippy.js/dist/tippy.css';
-import tippy from 'tippy.js';
 import 'tippy.js/themes/light.css';
 import Dropdown from '../components/Dropdown';
 
@@ -34,17 +33,6 @@ function Main() {
             initialView="dayGridMonth"
             contentHeight="auto" // 높이를 자동으로 조절
             aspectRatio={1.8}
-            // eventDidMount={(info) => {
-            // tippy(info.el, {
-            //     animation: 'scale',
-            //     content: '111111111111111111111111111',
-            //     allowHTML: true,
-            //     interactive: true,
-            //     interactiveDebounce: 75,
-            //     trigger: 'click',
-            // });
-            // }}
-            
             dateClick={(info) => {
               alert('Clicked on: ' + info.dateStr);
               alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
