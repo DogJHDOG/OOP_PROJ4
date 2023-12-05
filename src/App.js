@@ -5,6 +5,7 @@ import Main from './pages/Main';
 import Example from './pages/Example';
 import NoticePage from './pages/NoticePage';
 import Login from './pages/Login';
+import CreatePage from './pages/CreatePage';
 
 const App = () => {
   return (
@@ -14,7 +15,7 @@ const App = () => {
           <Route path="/" element={<Main />} />
           <Route path='/login' element={<Login/>}/>
           <Route path="/1" element={<Example/>}/>
-          <Route path="/:tag/:num" element={<NoticePage></NoticePage>}/>
+          <Route path="/:tag/:num" element={<CreatePage></CreatePage>}/>
         </Routes>
       </Router>
     </div>

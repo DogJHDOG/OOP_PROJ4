@@ -13,6 +13,8 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.2",
     "draft-convert": "^2.1.13",
+    "draft-js": "^0.11.7",
+    "draftjs-to-html": "^0.9.1",
     "fullcalendar": "^6.1.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
