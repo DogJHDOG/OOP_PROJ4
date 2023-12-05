@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Br
 
 import Main from './pages/Main';
 import Example from './pages/Example';
-import NoticePage from './pages/NoticePage';
 import Login from './pages/Login';
 import CreatePage from './pages/CreatePage';
 
