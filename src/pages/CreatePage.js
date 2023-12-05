@@ -2,15 +2,23 @@ import '../App.css';
 import React, { useState} from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import '../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { EditorState } from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
 import styled from 'styled-components';
-import { convertToHTML } from 'draft-convert';
+import draftjsToHtml from 'draftjs-to-html';
 
 
 function Checkbox({ children, disabled, checked, onChange }) {
   return (
-    <label>
+    <label style={{
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      textAlign: 'flex-start'
+    }}>
       <input
+        style={{
+          flexDirection: 'row',
+          alignItems: 'flex-start'
+        }}
         type="checkbox"
         disabled={disabled}
         checked={checked}
@@ -24,17 +32,18 @@ function Checkbox({ children, disabled, checked, onChange }) {
 function CreatePage() {
 
   const [calenderMemo, setCalenderMemo] = React.useState(false);
+  const [createNotice, setCreateNotice] = React.useState(false);
   //const [marketing, setMarketing] = React.useState(false);
 
   const [editorState, setEditorState] = useState( () => {
     EditorState.createEmpty()
   });
 
-  const [inputTitle, setInputTitle] = useState('');
+  const [inputTitle, setInputTitle] = useState(null);
   const [convertedContent, setConvertedContent] = useState(null);
-  const [inputDay, setInputDay] = useState('');
-  const [inputMemo, setInputMemo] = useState('');
-  const [inputFile, setInputFile] = useState();
+  const [inputDay, setInputDay] = useState(null);
+  const [inputMemo, setInputMemo] = useState(null);
+  const [inputFile, setInputFile] = useState(null);
 
 
   const handleInputTitleChange = (event) => {
@@ -46,8 +55,13 @@ function CreatePage() {
   };
 
   const handleInputBodyChange = () => {
-    let html = convertToHTML(editorState.getCurrentContent());
+
+    
+    const rawContentState = convertToRaw(editorState.getCurrentContent());
+    const html = draftjsToHtml(rawContentState);
+    //html = convertToHTML((convertToRaw(editorState.getCurrentContent())));
     setConvertedContent(html);
+
   };
 
   const handleInputMemoChange = (event) => {
@@ -56,7 +70,7 @@ function CreatePage() {
 
   const handleInputFileChange = (event) => {
     const fileinput = document.getElementById(event.target.id);
-    const selectedFile = fileinput.files[0];
+    const selectedFile = [...fileinput.files];
     //console.log(selectedFile);
     setInputFile(selectedFile);
   };
@@ -72,23 +86,48 @@ function CreatePage() {
 
   return (
     <div className="App">
-      <form>
-      <h2>Writing Page</h2>
+      <form><RealTitle>
+      <h1>Creating Page</h1></RealTitle>
+
+      <Container>
       <Title>
+      <div className='Notice'>
+        <div className='AllowNotice'>
+      <Checkbox 
+      style = {{fontSize: "20px",
+                flexDirection: 'row',
+                alignItems: 'flex-start'}}
+      name='mycheckbox' 
+      checked={createNotice} 
+      onChange={setCreateNotice}
+      >Allow Notice
+      </Checkbox></div>
+      
       <input 
+        disabled={!createNotice}
         type='text'
         name='Title'
         placeholder='Title...'
-        style={{width: "1000px"}}
+        style={{width: "95%",
+                height: "40px",
+                fontSize: "20px"}
+                }
         value={inputTitle}
         onChange={handleInputTitleChange}
 
-       ></input></Title>
+       ></input>
+       
+       <div className='Editor'>
       <Editor
+        readOnly = {!createNotice}
+        name='Body'
         editorState={editorState}
         toolbarClassName="toolbarClassName"
         wrapperClassName="wrapperClassName"
         editorClassName="editorClassName"
+        wrapperStyle={{textAlignment: 'center'}}
+        editorStyle={{height: "400px",
+                    textAlignment: 'center'}}      
         toolbar={{
           options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'image', 'remove', 'history'],
   inline: {
@@ -212,37 +251,50 @@ function CreatePage() {
         onEditorStateChange={setEditorState}
         onContentStateChange={handleInputBodyChange}
         placeholder="The message goes here..."
-      />
+      /></div>
+
+      <div className='File'>
+      <input type="file" id="fileUpload"
+        disabled={!createNotice}
+        multiple={true}
+        onChange={handleInputFileChange}
+        style={{alignItems: 'flex-start',
+                flexDirection: 'row',
+                padding: '1rem'}}
+        ></input></div></div></Title></Container>
       
-      <Title>
+
       <article>
-      <header>
-        <h3>Calaneder & Memo</h3>
-      </header>
+      <Container><Title>
       <p>
-      <Checkbox name='mycheckbox' checked={calenderMemo} onChange={setCalenderMemo}>
-        Allow Caleander Schedule 
-      </Checkbox></p>
+        <div className='AllowNotice'>
+      <Checkbox 
+      style = {{fontSize: "20px",
+      flexDirection: 'row',
+      alignItems: 'flex-start'}}
+      name='mycheckbox' checked={calenderMemo} onChange={setCalenderMemo}>
+        Allow Calendar Schedule 
+      </Checkbox></div></p>
+        
+        <div className='AllowNotice'>
         <p><input name='Calender' disabled={!calenderMemo} placeholder='Ex) 2022-12-04'
         value={inputDay}
         onChange={handleInputDayChange}
-        ></input></p>
+        ></input></p></div>
+
+        <div className='AllowNotice'>
         <p><textarea name='Memo' disabled={!calenderMemo} placeholder='Memo..'
         value={inputMemo}
         onChange={handleInputMemoChange}
-        ></textarea></p>
-    </article></Title>
-    <Title>
-        <h3>File upload</h3>
-        <input type="file" id="fileUpload"
-        onChange={handleInputFileChange}
-        />
-    </Title>
+        ></textarea></p></div></Title></Container>
+    </article>
+    
+    
     <p>
-    <button type='submit' onClick={(event) => {
+    <StyledButton disabled = {!createNotice && !calenderMemo} type='submit' onClick={(event) => {
       event.preventDefault();
       handleButtonClick();
-    }}>Create</button>
+    }}>Create</StyledButton>
     </p>
     </form>
     </div>
@@ -251,13 +303,43 @@ function CreatePage() {
 
 export default CreatePage;
 
-const Title = styled.div`
-border: 2px solid rgb(177, 187, 228);
+const RealTitle = styled.div`
+
 padding: 1rem
+`
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* 다른 스타일들... */
 `;
+
+const Title = styled.div`
+border: 2px solid rgb(84, 84, 84);
+display: flex; /* 추가: flex 컨테이너로 설정 */
+justify-content: center;
+flex-direction: row; /* 또는 생략 가능: 기본값이 row 입니다 */
+align-items: center;
+width: 55%;
+border-width: 2px;
+border-radius: 8px; /* 수정: "bordoer-radius" -> "border-radius" */
+padding: 8px 16px;
+cursor: pointer;
+`;
+
+//border: 2px solid rgb(173, 194, 169);
 
 const Body = styled.div`
 background-color:rgb(222, 222, 239);
     border-radius: 10px;  
     padding: 1rem; 
     `;
+
+const StyledButton = styled.button`
+    background-color:rgb(112, 189, 255);
+    padding: 8px 16px;
+    font-size: 16px;
+    border-width: 1px;
+    border-radius: 8px;
+    cursor: pointer;
+`;

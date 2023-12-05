@@ -1,6 +1,13 @@
 .App {
   text-align: center;
+  flex-direction: row;
+  align-items: center;
 }
+
+.Title2 {
+  text-align: flex-end;
+}
+
 
 .App-logo {
   height: 40vmin;
@@ -35,4 +42,51 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.File {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.AllowNotice {
+  font-size: calc(22px);
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 1rem;
+}
+
+
+.Editor {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+}
+
+.toolbarClassName {
+  border-radius: 10px;
+}
+.wrapperClassName {
+  align-content: center;
+  align-self: center;
+  width: 100%;
+  align-items: center;
+  flex-direction: row;
+  padding: 1rem;
+}
+.editorClassName {
+  background-color:rgb(212, 212, 212);
+  align-self: center;
+  align-content: center;
+  height: 400px;
+  width: 100%;
+  border-radius: 10px;  
+  padding: 1rem; 
+  flex-direction: row;
+  align-items: center;
 }
