@@ -329,11 +329,6 @@ cursor: pointer;
 
 //border: 2px solid rgb(173, 194, 169);
 
-const Body = styled.div`
-background-color:rgb(222, 222, 239);
-    border-radius: 10px;  
-    padding: 1rem; 
-    `;
 
 const StyledButton = styled.button`
     background-color:rgb(112, 189, 255);
