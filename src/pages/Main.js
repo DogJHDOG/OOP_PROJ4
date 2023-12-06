@@ -13,13 +13,7 @@ function Main() {
   const [curX, setCurX] = useState(0);
   const [curY, setCurY] = useState(0);
   const modalBackground = useRef(null);
-  const modalOutSideClick = () => {
-    if(isDropdownView===true){
-      setDropdownView(false);
-    }else{
-      setDropdownView(true);
-    }
-  }
+
   let clickX = 0;
   let clickY = 0;
   return (
