@@ -403,7 +403,7 @@ function CreatePage() {
       event.preventDefault();
       handleButtonClick();
       //sendTextToEditor("#Notice");  
-    }}>Create</StyledButton>
+    }}>Save</StyledButton>
     </p>
     </form>
     </div>
