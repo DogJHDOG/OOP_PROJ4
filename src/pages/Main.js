@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -12,12 +12,24 @@ function Main() {
   const [isDropdownView, setDropdownView] = useState(false);
   const [curX, setCurX] = useState(0);
   const [curY, setCurY] = useState(0);
-
+  const modalBackground = useRef(null);
+  const modalOutSideClick = () => {
+    if(isDropdownView===true){
+      setDropdownView(false);
+    }else{
+      setDropdownView(true);
+    }
+  }
   let clickX = 0;
   let clickY = 0;
   return (
     <div>
-    {isDropdownView && <Dropdown x={curX} y={curY}/> }    
+    {isDropdownView && <Dropdown 
+      x={curX} 
+      y={curY} 
+      ref={modalBackground}
+      setDropdownView={setDropdownView}
+    /> }    
     <Container>
       <Login onClick={
         ()=>{window.location.href=`/login`}
@@ -45,11 +57,10 @@ function Main() {
               // 또는 alert를 사용하여 간단한 메시지를 표시할 수 있습니다.
               clickX = arg.jsEvent.pageX;
               clickY = arg.jsEvent.pageY;
-              alert(clickX +'and'+clickY)
               setCurX(clickX);
               setCurY(clickY);
 
-              setDropdownView(!isDropdownView);
+              setDropdownView(true);
 
                      
               // 기본 동작을 막고자 할 때는 아래와 같이 preventDefault()를 호출합니다.
@@ -73,18 +84,25 @@ function Main() {
 
     </Caldiv>
 
-      <div>
-        <NoticeTitle>Notice</NoticeTitle>
-        <Notice onClick={
-          ()=>{
-            window.location.href=`/project/04`
-          }}
-        ></Notice>
-        <Notice></Notice>
-        <Notice></Notice>
-        <Notice></Notice>
-        <Notice></Notice>
-      </div>
+      <Underdiv>
+        <Noticediv>
+          <NoticeTitle>Notice</NoticeTitle>
+          <Notice onClick={
+            ()=>{
+              window.location.href=`/project/04`
+            }}
+          ></Notice>
+          <Notice></Notice>
+          <Notice></Notice>
+          <Notice></Notice>
+          <Notice></Notice>
+        </Noticediv>
+        <Lecturediv>
+          <NoticeTitle>
+            Lecture
+          </NoticeTitle>
+        </Lecturediv>
+      </Underdiv>
     </Container>
     </div>
 
@@ -123,6 +141,33 @@ const Caldiv = styled.div`
         min-height: 15vh; /* Further adjust height for even smaller screens */
     }
 `;
+
+const Underdiv =styled.div`
+
+    width :100%;
+    height : auto;
+    display : flex;
+    flex-direction : row;
+    justify-content : space-evenly; /* 올바른 속성명으로 수정 */
+`
+
+const Noticediv =styled.div`
+
+    width : 40%;
+    height:auto;
+    display: flex;
+    flex-direction : column;
+
+`
+const Lecturediv = styled.div`
+
+  width : 40%;
+  height:auto;
+  display: flex;
+  flex-direction : column;
+
+` 
+
 const Login = styled.div`
   margin-top : 20px;
   cursor: pointer;
