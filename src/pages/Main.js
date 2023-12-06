@@ -10,14 +10,14 @@ import Dropdown from '../components/Dropdown';
 
 
 var events ={
-  ['2023-12-20']:[            
+  '2023-12-20':[            
   { title: '기말고사 시험1', date: '2023-12-20' ,memo:'a'},
   { title: '기말고사 시험2', date: '2023-12-20' ,memo:'a'},
   { title: '기말고사 시험3', date: '2023-12-20' ,memo:'a'},
   { title: '기말고사 시험4', date: '2023-12-20' ,memo:'a'},
   { title: '기말고사 시험', date: '2023-12-20' ,memo:'a'},
   ],
-  ['2023-12-19']:[
+  '2023-12-19':[
     { title: '기말고사 시험', date: '2023-12-19' ,memo:'a'},
   ]
   
