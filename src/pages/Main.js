@@ -8,20 +8,44 @@ import 'tippy.js/dist/tippy.css';
 import 'tippy.js/themes/light.css';
 import Dropdown from '../components/Dropdown';
 
+
+var events ={
+  ['2023-12-20']:[            
+  { title: '기말고사 시험1', date: '2023-12-20' ,memo:'a'},
+  { title: '기말고사 시험2', date: '2023-12-20' ,memo:'a'},
+  { title: '기말고사 시험3', date: '2023-12-20' ,memo:'a'},
+  { title: '기말고사 시험4', date: '2023-12-20' ,memo:'a'},
+  { title: '기말고사 시험', date: '2023-12-20' ,memo:'a'},
+  ],
+  ['2023-12-19']:[
+    { title: '기말고사 시험', date: '2023-12-19' ,memo:'a'},
+  ]
+  
+}
+
+
 function Main() {
-  const [isDropdownView, setDropdownView] = useState(false);
+  const newArray = Object.entries(events).reduce((result, [date, eventsList]) => {
+    const transformedEvents = eventsList.map(({ title, date }) => ({ title, date }));
+    result.push(...transformedEvents);
+    return result;
+  }, []);
+  
+  console.log(newArray); 
+  console.log(events);
+
+  const [isDropdownView, setDropdownView] = useState(null);
   const [curX, setCurX] = useState(0);
   const [curY, setCurY] = useState(0);
-  const modalBackground = useRef(null);
 
   let clickX = 0;
   let clickY = 0;
   return (
     <div>
-    {isDropdownView && <Dropdown 
+    {isDropdownView !== null && <Dropdown 
       x={curX} 
       y={curY} 
-      ref={modalBackground}
+      eventsArray={events[isDropdownView] || []}
       setDropdownView={setDropdownView}
     /> }    
     <Container>
@@ -47,29 +71,20 @@ function Main() {
             moreLinkClick={(arg) => {
               // arg 객체에는 "more" 링크와 관련된 정보가 담겨 있습니다.
               
-              
               // 또는 alert를 사용하여 간단한 메시지를 표시할 수 있습니다.
               clickX = arg.jsEvent.pageX;
               clickY = arg.jsEvent.pageY;
               setCurX(clickX);
               setCurY(clickY);
-
-              setDropdownView(true);
-
+              const date = arg.date.toISOString().split('T')[0]
+              setDropdownView(date);
+              console.log(isDropdownView);
+              console.log(date);
                      
               // 기본 동작을 막고자 할 때는 아래와 같이 preventDefault()를 호출합니다.
             }}
           
-            events={[
-            { title: 'Project04 Announcement', date: '2023-12-01' },
-            { title: '기말고사 시험1', date: '2023-12-20' },
-            { title: '기말고사 시험2', date: '2023-12-20' },
-            { title: '기말고사 시험3', date: '2023-12-20' },
-            { title: '기말고사 시험4', date: '2023-12-20' },
-            { title: '기말고사 시험', date: '2023-12-20' },
-            { title: '기말고사 시험', date: '2023-12-19' },
-            
-            ]}
+            events={newArray}
 
 
   
