@@ -1,11 +1,10 @@
 import '../App.css';
-import React, { useState} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
-import '../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { EditorState, convertToRaw } from 'draft-js';
+import '/node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { EditorState, convertToRaw, Modifier } from 'draft-js';
 import styled from 'styled-components';
 import draftjsToHtml from 'draftjs-to-html';
-
 
 function Checkbox({ children, disabled, checked, onChange }) {
   return (
@@ -29,16 +28,59 @@ function Checkbox({ children, disabled, checked, onChange }) {
   );
 }
 
+
+
 function CreatePage() {
 
   const [calenderMemo, setCalenderMemo] = React.useState(false);
   const [createNotice, setCreateNotice] = React.useState(false);
+  const [notice, setNotice] = React.useState(false);
+  const [resource, setResource] = React.useState(false);
+
   //const [marketing, setMarketing] = React.useState(false);
+
+  const editorRef = useRef(null);
+
+  useEffect(() => {
+    focusEditor();
+  }, []);
+
+  const focusEditor = () => {
+    if (editorRef.current) {
+      editorRef.current.focusEditor();
+      //console.log("1. Editor has the focus now");
+    }
+  };
+  
+  const onEditorStateChange = (newEditorState) => {
+    setEditorState(newEditorState);
+  };
+  
+
+  const sendTextToEditor = (text) => {
+      setEditorState(insertText(text, editorState));
+      focusEditor();
+  };
+
+  const insertText = (text, editorState) => {
+    const currentContent = editorState.getCurrentContent();
+    const currentSelection = editorState.getSelection();
+
+    const newContent = Modifier.replaceText(
+      currentContent,
+      currentSelection,
+      text
+    );
+
+    const newEditorState = EditorState.push(editorState, newContent, 'insert-characters');
+    return  EditorState.forceSelection(newEditorState, newContent.getSelectionAfter());
+  };
 
   const [editorState, setEditorState] = useState( () => {
     EditorState.createEmpty()
   });
 
+  let id = 0;
   const [inputTitle, setInputTitle] = useState(null);
   const [convertedContent, setConvertedContent] = useState(null);
   const [inputDay, setInputDay] = useState(null);
@@ -76,11 +118,14 @@ function CreatePage() {
   };
 
   const handleButtonClick = () => {
+    console.log('ID', id);
     console.log('Input Title:', inputTitle);
     console.log('Input Day:', inputDay);
     console.log('Input Memo:', inputMemo);
     console.log('Input Body' , convertedContent);
     console.log('Input File', inputFile);
+    console.log('Notice Tag: ', notice);
+    console.log('Resource Tag: ', resource);
     // 이제 inputValue를 사용하여 원하는 작업을 수행할 수 있습니다.
   };
 
@@ -88,7 +133,7 @@ function CreatePage() {
     <div className="App">
       <form><RealTitle>
       <h1>Creating Page</h1></RealTitle>
-
+      
       <Container>
       <Title>
       <div className='Notice'>
@@ -99,18 +144,22 @@ function CreatePage() {
                 alignItems: 'flex-start'}}
       name='mycheckbox' 
       checked={createNotice} 
-      onChange={setCreateNotice}
+      onChange={(checked) => {
+        setCreateNotice(checked);
+        focusEditor();
+      }}
       >Allow Notice
       </Checkbox></div>
       
       <input 
-        disabled={!createNotice}
+        
         type='text'
         name='Title'
         placeholder='Title...'
         style={{width: "95%",
                 height: "40px",
-                fontSize: "20px"}
+                fontSize: "20px"
+                }
                 }
         value={inputTitle}
         onChange={handleInputTitleChange}
@@ -119,6 +168,12 @@ function CreatePage() {
        
        <div className='Editor'>
       <Editor
+        
+        ref={editorRef}
+        hashtag={{
+          separator: ' ',
+          trigger: '#',
+        }}
         readOnly = {!createNotice}
         name='Body'
         editorState={editorState}
@@ -204,7 +259,7 @@ function CreatePage() {
     popupClassName: undefined,
     dropdownClassName: undefined,
     showOpenOptionOnHover: true,
-    defaultTargetOption: '_self',
+    defaultTargetOption: './hello.txt',
     options: ['link', 'unlink'],
     link: { className: undefined },
     unlink: { className: undefined },
@@ -248,11 +303,12 @@ function CreatePage() {
   },
         }}
         
-        onEditorStateChange={setEditorState}
+        onEditorStateChange={onEditorStateChange}
         onContentStateChange={handleInputBodyChange}
         placeholder="The message goes here..."
       /></div>
 
+      <Border>
       <div className='File'>
       <input type="file" id="fileUpload"
         disabled={!createNotice}
@@ -261,7 +317,47 @@ function CreatePage() {
         style={{alignItems: 'flex-start',
                 flexDirection: 'row',
                 padding: '1rem'}}
-        ></input></div></div></Title></Container>
+
+        
+        ></input></div>
+
+      <div className='Tags'>
+      <Checkbox 
+      disabled={!createNotice}
+      style = {{fontSize: "20px",
+                flexDirection: 'row',
+                alignItems: 'flex-start',
+                padding: '1rem'}}
+      name='mycheckbox' 
+      checked={notice} 
+      onChange={(checked) => {
+        setNotice(checked);
+        if (checked) {
+          sendTextToEditor('#Notice');
+        }
+      }}
+      >Notice
+      </Checkbox></div>
+
+      <div className='Tags'>
+      <Checkbox 
+      disabled={!createNotice}
+      style = {{fontSize: "20px",
+                flexDirection: 'row',
+                alignItems: 'flex-start',
+                padding: '1rem'}}
+      name='mycheckbox' 
+      checked={resource} 
+      onChange={(checked) => {
+        setResource(checked);
+        if (checked) {
+          sendTextToEditor('#Resource');
+        }
+      }}
+      >Resource
+      </Checkbox></div></Border>
+      </div>
+        </Title></Container>
       
 
       <article>
@@ -292,8 +388,10 @@ function CreatePage() {
     
     <p>
     <StyledButton disabled = {!createNotice && !calenderMemo} type='submit' onClick={(event) => {
+      id = id + 1;
       event.preventDefault();
       handleButtonClick();
+      //sendTextToEditor("#Notice");  
     }}>Create</StyledButton>
     </p>
     </form>
@@ -304,8 +402,7 @@ function CreatePage() {
 export default CreatePage;
 
 const RealTitle = styled.div`
-
-padding: 1rem
+  padding: 1rem
 `
 const Container = styled.div`
   display: flex;
@@ -327,8 +424,20 @@ padding: 8px 16px;
 cursor: pointer;
 `;
 
-//border: 2px solid rgb(173, 194, 169);
+const Border = styled.div`
 
+display: flex; /* 추가: flex 컨테이너로 설정 */
+justify-content: center;
+flex-direction: row; /* 또는 생략 가능: 기본값이 row 입니다 */
+align-items: center;
+width: 100%;
+border-width: 2px;
+border-radius: 8px; /* 수정: "bordoer-radius" -> "border-radius" */
+padding: 8px 16px;
+cursor: pointer;
+`;
+
+//border: 2px solid rgb(173, 194, 169);
 
 const StyledButton = styled.button`
     background-color:rgb(112, 189, 255);
