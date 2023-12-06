@@ -1,19 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Dropdown = ({ x, y, ref,setDropdownView }) => {
+const Dropdown = ({ x, y, eventsArray, setDropdownView }) => {
+  console.log(eventsArray);
+
   return (
     <Dropdiv x={x} y={y}>
-      <CloseButton onClick={()=>setDropdownView(false)}>X</CloseButton>
+      <CloseButton onClick={() => setDropdownView(null)}>X</CloseButton>
 
       <ul>
-        {Array(3).fill('').map((li, i) => (
-          <li key={i} onClick={() => console.log(`Dropdown${i + 1}`)}>Dropdown{i + 1}</li>
+        {eventsArray.map((event, i) => (
+          <li key={i} onClick={() => console.log(`Dropdown${i + 1}`)}>
+            <div>
+              <div>{`Title: ${event.title}`}</div>
+              <div>{`Memo: ${event.memo}`}</div>
+            </div>
+          </li>
         ))}
       </ul>
     </Dropdiv>
   );
 };
+
 
 export default Dropdown;
 
