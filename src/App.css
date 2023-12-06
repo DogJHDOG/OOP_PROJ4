@@ -31,7 +31,8 @@
 }
 
 .AllowNotice {
-  font-size: calc(22px);
+  font-size: calc(20px);
+  font-weight: bold;
   display: flex;
   justify-content: flex-start;
   flex-direction: row;
