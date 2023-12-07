@@ -37,6 +37,8 @@ function Main() {
   const [isDropdownView, setDropdownView] = useState(null);
   const [curX, setCurX] = useState(0);
   const [curY, setCurY] = useState(0);
+  //useState로 나중에 넣기, admin임이 확인되면 생기는 버튼에 대한 처리
+  const isAdmin = true;
 
   let clickX = 0;
   let clickY = 0;
@@ -55,7 +57,9 @@ function Main() {
         로그인
       </Login>
       <Title>2023.2 Object Oriented Programming</Title>
-
+      {      
+      isAdmin ? (<CreateNewButton>Add Schedule</CreateNewButton>) : null
+      }    
     <Caldiv>
 
         <FullCalendar
@@ -92,7 +96,6 @@ function Main() {
 
 
     </Caldiv>
-
       <Underdiv>
         <Noticediv>
           <NoticeTitle>Notice</NoticeTitle>
@@ -134,6 +137,21 @@ const Container = styled.div`
         width: 100%;
     }
 `;
+
+const CreateNewButton = styled.button`
+  background-color: #f0f0f0; /* 연한 회색 */
+  color: #333; /* 연한 검정색 */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ccc; /* 마우스 호버 시 더 어두운 회색으로 변경 */
+  }
+`;
+
 
 const Caldiv = styled.div`
     width: 80%;
