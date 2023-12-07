@@ -60,7 +60,7 @@ function Main() {
       {      
       isAdmin ? (<CreateNewButton
           onClick = {
-            ()=>{window.location.href='/1/1'}
+            ()=>{window.location.href='/createPage'}
           }
           >Add Schedule</CreateNewButton>) : 
           null

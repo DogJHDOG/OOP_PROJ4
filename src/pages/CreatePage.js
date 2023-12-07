@@ -34,7 +34,6 @@ function Checkbox({ children, disabled, checked, onChange }) {
 function CreatePage() {
 
   const [calenderMemo, setCalenderMemo] = React.useState(false);
-  const [createNotice, setCreateNotice] = React.useState(false);
   const [notice, setNotice] = React.useState(false);
   const [resource, setResource] = React.useState(false);
 
@@ -140,19 +139,7 @@ function CreatePage() {
       <Container>
       <Title>
       <div className='Notice'>
-        <div className='AllowNotice'>
-      <Checkbox 
-      style = {{fontSize: "20px",
-                flexDirection: 'row',
-                alignItems: 'flex-start'}}
-      name='mycheckbox' 
-      checked={createNotice} 
-      onChange={(checked) => {
-        setCreateNotice(checked);
-        focusEditor();
-      }}
-      >Allow Notice
-      </Checkbox></div>
+      
       
       <input 
         
@@ -161,7 +148,8 @@ function CreatePage() {
         placeholder='Title...'
         style={{width: "95%",
                 height: "40px",
-                fontSize: "20px"
+                fontSize: "20px",
+                marginTop: '1rem'
                 }
                 }
         value={inputTitle}
@@ -177,7 +165,6 @@ function CreatePage() {
           separator: ' ',
           trigger: '#',
         }}
-        readOnly = {!createNotice}
         name='Body'
         editorState={editorState}
         toolbarClassName="toolbarClassName"
@@ -314,7 +301,6 @@ function CreatePage() {
       <Border>
       <div className='File'>
       <input type="file" id="fileUpload"
-        disabled={!createNotice}
         multiple={true}
         onChange={handleInputFileChange}
         style={{alignItems: 'flex-start',
@@ -326,7 +312,6 @@ function CreatePage() {
 
       <div className='Tags'>
       <Checkbox 
-      disabled={!createNotice}
       style = {{fontSize: "20px",
                 flexDirection: 'row',
                 alignItems: 'flex-start',
@@ -344,7 +329,6 @@ function CreatePage() {
 
       <div className='Tags'>
       <Checkbox 
-      disabled={!createNotice}
       style = {{fontSize: "20px",
                 flexDirection: 'row',
                 alignItems: 'flex-start',
@@ -390,7 +374,7 @@ function CreatePage() {
     
     
     <p>
-    <StyledButton disabled = {!createNotice && !calenderMemo} type='submit' onClick={(event) => {
+    <StyledButton type='submit' onClick={(event) => {
       id = id + 1;
       event.preventDefault();
       handleButtonClick();
