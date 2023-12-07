@@ -5,6 +5,7 @@ import '/node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { EditorState, convertToRaw, Modifier } from 'draft-js';
 import styled from 'styled-components';
 import draftjsToHtml from 'draftjs-to-html';
+import { useNavigate } from 'react-router-dom';
 
 function Checkbox({ children, disabled, checked, onChange }) {
   return (
@@ -79,6 +80,8 @@ function CreatePage() {
   const [editorState, setEditorState] = useState( () => {
     EditorState.createEmpty()
   });
+
+  const navigate = useNavigate();
 
   let id = 0;
   const [inputTitle, setInputTitle] = useState(null);
@@ -391,6 +394,7 @@ function CreatePage() {
       id = id + 1;
       event.preventDefault();
       handleButtonClick();
+      navigate('/');
       //sendTextToEditor("#Notice");  
     }}>Create</StyledButton>
     </p>

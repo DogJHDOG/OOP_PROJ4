@@ -6,6 +6,7 @@ import { EditorState, convertToRaw, Modifier, ContentState } from 'draft-js';
 import htmlToDraft from 'html-to-draftjs';
 import styled from 'styled-components';
 import draftjsToHtml from 'draftjs-to-html';
+import { useNavigate } from 'react-router-dom';
 
 function Checkbox({ children, disabled, checked, onChange }) {
   return (
@@ -127,6 +128,8 @@ function CreatePage() {
     //console.log(selectedFile);
     setInputFile(selectedFile);
   };
+
+  const navigate = useNavigate();
 
   const handleButtonClick = () => {
     console.log('ID', id);
@@ -403,6 +406,7 @@ function CreatePage() {
       event.preventDefault();
       handleButtonClick();
       //sendTextToEditor("#Notice");  
+      navigate('/');
     }}>Save</StyledButton>
     </p>
     </form>
