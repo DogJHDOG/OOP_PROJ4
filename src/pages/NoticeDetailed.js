@@ -53,6 +53,9 @@ function NoticeDetailed() {
 
   useEffect(() => {
     focusEditor();
+
+    
+
     const blocksFromHtml = htmlToDraft(receivedHTML);
     if (blocksFromHtml) {
       const { contentBlocks, entityMap } = blocksFromHtml;
