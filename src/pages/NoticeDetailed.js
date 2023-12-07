@@ -143,7 +143,7 @@ function NoticeDetailed() {
         editorClassName="editorClassName"
         wrapperStyle={{textAlignment: 'center'}}
         editorStyle={{height: "500px",
-                      width: "1025px",
+                      
                     textAlignment: 'center'}}      
         toolbarHidden = {true}
         
