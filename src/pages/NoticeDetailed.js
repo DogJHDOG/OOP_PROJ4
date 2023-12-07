@@ -42,7 +42,6 @@ function NoticeDetailed() {
   const [inputTitle, setInputTitle] = useState('PROJECT4 Announcement');
   const [inputDay, setInputDay] = useState('2023-12-16');
   const [inputMemo] = useState('This is deadline of PROJ4');
-  const [setInputFile] = useState(null);
 
   const receivedHTML = '<ul><li><strong>The deadline: 2023-12-09</strong></li><li><span style="color: rgb(0,0,0);font-size: medium;font-family: Arial;"><strong>in your final report, please include the result of UML modeling</strong></span></li><li><span style="color: rgb(0,0,0);font-size: medium;font-family: AppleSDGothicNeoM00;">If </span><span style="color: rgb(0,0,0);background-color: rgb(247,218,100);font-size: medium;font-family: AppleSDGothicNeoM00;">your team size is one</span><span style="color: rgb(0,0,0);font-size: medium;font-family: AppleSDGothicNeoM00;"> (meaning you are the only student in your team or you did not register a team), you are supposed to do project 1, 2, and 3 as individual project (no report, no presentation). In this case, however, you are supposed to do project 4 as team project, which means you should submit report and presentation video file (.mp4) as well as source code for project 4.</span></li><li>#Notice</li></ul>';
   
@@ -206,7 +205,6 @@ function NoticeDetailed() {
       style={{
         alignContent: 'flex-end',
         alignItems: 'flex-end',
-        alignContent: 'flex-end'
       }}>
     
     <StyledButton 
