@@ -7,6 +7,7 @@ import htmlToDraft from 'html-to-draftjs';
 import styled from 'styled-components';
 import draftjsToHtml from 'draftjs-to-html';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Checkbox({ children, disabled, checked, onChange }) {
   return (
@@ -131,15 +132,59 @@ function CreatePage() {
 
   const navigate = useNavigate();
 
-  const handleButtonClick = () => {
-    console.log('ID', id);
-    console.log('Input Title:', inputTitle);
-    console.log('Input Day:', inputDay);
-    console.log('Input Memo:', inputMemo);
-    console.log('Input Body' , convertedContent);
+  const handleButtonClick = async () => {
+    //console.log('ID', id);
+    //console.log('Input Title:', inputTitle);
+    //console.log('Input Day:', inputDay);
+    //console.log('Input Memo:', inputMemo);
+    //console.log('Input Body' , convertedContent);
     console.log('Input File', inputFile);
-    console.log('Notice Tag: ', notice);
-    console.log('Resource Tag: ', resource);
+    //console.log('Notice Tag: ', notice);
+    //console.log('Resource Tag: ', resource);
+
+    let tagName = null;
+    let createData = null;
+
+    if (notice === true) {
+      tagName = 'Notice'
+    } else if (resource === true) {
+      tagName = 'Resource'
+    }
+    
+    if (calenderMemo === true) {
+      createData = {
+        title: inputTitle,
+        contents: convertedContent,
+        isCalendar: calenderMemo,
+        tagName: tagName,
+        memo: inputMemo,
+        time: inputDay
+      }
+    } else if (calenderMemo === false) {
+      createData = {
+        title: inputTitle,
+        contents: convertedContent,
+        isCalendar: calenderMemo,
+        tagName: tagName,
+        //memo: inputMemo,
+        //time: inputDay
+      }
+    }
+    
+    try {
+      const response = await axios.put(
+        'https://oop.cien.or.kr/api/notice',
+        createData
+      );
+  
+      console.log('응답:', response.data);
+      // 성공적인 경우 처리, 예를 들어 다른 페이지로 리다이렉트
+      navigate('/');
+    } catch (error) {
+      console.error('에러:', error);
+      // 에러 처리
+    }
+    
     // 이제 inputValue를 사용하여 원하는 작업을 수행할 수 있습니다.
   };
 
@@ -329,6 +374,7 @@ function CreatePage() {
                 alignItems: 'flex-start',
                 padding: '1rem'}}
       name='mycheckbox' 
+      disabled={resource}
       checked={notice} 
       onChange={(checked) => {
         setNotice(checked);
@@ -346,6 +392,7 @@ function CreatePage() {
                 alignItems: 'flex-start',
                 padding: '1rem'}}
       name='mycheckbox' 
+      disabled={notice}
       checked={resource} 
       onChange={(checked) => {
         setResource(checked);
