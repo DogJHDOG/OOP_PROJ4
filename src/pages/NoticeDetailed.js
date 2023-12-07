@@ -15,6 +15,10 @@ function NoticeDetailed() {
   //const [marketing, setMarketing] = React.useState(false);
 
   const editorRef = useRef(null);
+  //처음에 true 로딩이 다 됬을때 false
+  const isLoading = false;
+  //content가 제대로 왔을때 false, content가 제대로 오지 않았을때 true
+  const isWrong = false;
 
 
   const focusEditor = () => {
@@ -98,142 +102,147 @@ function NoticeDetailed() {
 
   return (
     <div className="App">
-      <form><RealTitle>
-      <h1>Notice Page</h1></RealTitle>
-      
-      <Container>
-      <Title2>
-      
-      <div className='Title3'>
-      <label
-        disabled={true} 
-        type='text'
-        name='Title'
-        style={{width: "95%",
-                height: "40px",
-                fontSize: "24px",
-                fontWeight: "bold",
-                paddingTop: '0.7rem',
-                
-                }
-                }
-        value={inputTitle}
-        onChange={handleInputTitleChange}
+      {
+        isLoading ? <h1> loading</h1>: 
+          isWrong ? <h1>404</h1> :
+          <form>
+          <RealTitle><h1>Notice Page</h1></RealTitle>
         
-       >{inputTitle}</label></div>
-       </Title2></Container>
-       
-       <div className='Notice'>
-
+        <Container>
+        <Title2>
         
+        <div className='Title3'>
+        <label
+          disabled={true} 
+          type='text'
+          name='Title'
+          style={{width: "95%",
+                  height: "40px",
+                  fontSize: "24px",
+                  fontWeight: "bold",
+                  paddingTop: '0.7rem',
+                  
+                  }
+                  }
+          value={inputTitle}
+          onChange={handleInputTitleChange}
+          
+         >{inputTitle}</label></div>
+         </Title2></Container>
+         
+         <div className='Notice'>
+  
+          
+          <Container><Title>
+         <div className='Editor'>
+        <Editor
+          
+          ref={editorRef}
+          hashtag={{
+            separator: ' ',
+            trigger: '#',
+          }}
+          readOnly = {true}
+          name='Body'
+          editorState={editorState}
+          wrapperClassName='wrapperClassName'
+          editorClassName="editorClassName"
+          wrapperStyle={{textAlignment: 'center'}}
+          editorStyle={{height: "500px",
+                        
+                      textAlignment: 'center'}}      
+          toolbarHidden = {true}
+          
+          onEditorStateChange={onEditorStateChange}
+        /></div></Title></Container>
+  
+        <Container>
+        <Title>
+        <Border>
+        <Dropdown options={fileOption} onChange={handleFileChange} value={selectedFile || defaultOption}/>
+        <SelectedFileUrl>
+              {selectedFileUrl && (
+                <p>
+                  <strong style={{marginRight: '0.3rem'}}>Selected File URL:</strong> {selectedFileUrl}
+                  <button style={{marginLeft: '0.5rem'}} onClick={handleDownloadClick}>Download</button>
+                </p>
+              )}
+            </SelectedFileUrl>
+          
+       </Border></Title></Container>
+  
+  
+        </div>
+          
+        
+  
+        <article>
         <Container><Title>
-       <div className='Editor'>
-      <Editor
-        
-        ref={editorRef}
-        hashtag={{
-          separator: ' ',
-          trigger: '#',
-        }}
-        readOnly = {true}
-        name='Body'
-        editorState={editorState}
-        wrapperClassName='wrapperClassName'
-        editorClassName="editorClassName"
-        wrapperStyle={{textAlignment: 'center'}}
-        editorStyle={{height: "500px",
-                      
-                    textAlignment: 'center'}}      
-        toolbarHidden = {true}
-        
-        onEditorStateChange={onEditorStateChange}
-      /></div></Title></Container>
-
-      <Container>
-      <Title>
-      <Border>
-      <Dropdown options={fileOption} onChange={handleFileChange} value={selectedFile || defaultOption}/>
-      <SelectedFileUrl>
-            {selectedFileUrl && (
-              <p>
-                <strong style={{marginRight: '0.3rem'}}>Selected File URL:</strong> {selectedFileUrl}
-                <button style={{marginLeft: '0.5rem'}} onClick={handleDownloadClick}>Download</button>
-              </p>
-            )}
-          </SelectedFileUrl>
-        
-     </Border></Title></Container>
-
-
-      </div>
-        
+        <div className='AllowNotice'>
+          <p><input name='Calender' disabled={true} placeholder='Ex) 2022-12-04'
+          value={inputDay}
+          onChange={handleInputDayChange}
+          ></input></p></div>
+        <label
+          disabled={true} 
+          type='text'
+          name='Title'
+          style={{
+            border: '1px solid',
+            width: "95%",
+                  height: "40px",
+                  fontSize: "20px",
+                  
+                  paddingTop: '0.7rem',
+                  
+                  }
+                  }
+          onChange={handleInputTitleChange}
+          value={inputMemo}
+          
+         >{inputMemo}</label>
+         
+          </Title></Container>
+      </article>
       
-
-      <article>
-      <Container><Title>
-      <div className='AllowNotice'>
-        <p><input name='Calender' disabled={true} placeholder='Ex) 2022-12-04'
-        value={inputDay}
-        onChange={handleInputDayChange}
-        ></input></p></div>
-      <label
-        disabled={true} 
-        type='text'
-        name='Title'
+      <Container>
+      <Title3>
+      <Border2>
+        <div className='WholeButton'
         style={{
-          border: '1px solid',
-          width: "95%",
-                height: "40px",
-                fontSize: "20px",
-                
-                paddingTop: '0.7rem',
-                
-                }
-                }
-        onChange={handleInputTitleChange}
-        value={inputMemo}
-        
-       >{inputMemo}</label>
-       
-        </Title></Container>
-    </article>
-    
-    <Container>
-    <Title3>
-    <Border2>
-      <div className='WholeButton'
-      style={{
-        alignContent: 'flex-end',
-        alignItems: 'flex-end',
-      }}>
-    
-    <StyledButton 
-    style={{marginRight: '1rem'}}
-    type='submit' 
-    onClick={(event) => {
-      event.preventDefault();
-      navigate('/Update');
+          alignContent: 'flex-end',
+          alignItems: 'flex-end',
+        }}>
+      
+      <StyledButton 
+      style={{marginRight: '1rem'}}
+      type='submit' 
+      onClick={(event) => {
+        event.preventDefault();
+        navigate('/Update');
+  
+        //sendTextToEditor("#Notice");  
+      }}>Update</StyledButton> </div>
+      
+  
+     
+      <div className='WholeButton'>
+      <StyledButton2 type='submit' 
+      
+      onClick={(event) => {
+        alert("Delete the notice");
+        event.preventDefault();
+        navigate('/');
+        //sendTextToEditor("#Notice");  
+      }}>Delete</StyledButton2></div>
+      </Border2></Title3></Container>
+      
+      
+  
+  
+      </form>
 
-      //sendTextToEditor("#Notice");  
-    }}>Update</StyledButton> </div>
-    
-
-   
-    <div className='WholeButton'>
-    <StyledButton2 type='submit' 
-    
-    onClick={(event) => {
-      alert("Delete the notice");
-      event.preventDefault();
-      navigate('/');
-      //sendTextToEditor("#Notice");  
-    }}>Delete</StyledButton2></div>
-    </Border2></Title3></Container>
-    
-    
-
-
-    </form>
+      }
     </div>
   );
 }
