@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -7,6 +7,7 @@ import Notice from '../components/Notice';
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/themes/light.css';
 import Dropdown from '../components/Dropdown';
+import { getMainData } from '../apis/Axios';
 
 
 var events ={
@@ -24,16 +25,14 @@ var events ={
 }
 
 
-function Main() {
+const Main= ()=> {
+
+
   const newArray = Object.entries(events).reduce((result, [date, eventsList]) => {
     const transformedEvents = eventsList.map(({ title, date }) => ({ title, date }));
     result.push(...transformedEvents);
     return result;
   }, []);
-  
-  console.log(newArray); 
-  console.log(events);
-
   const [isDropdownView, setDropdownView] = useState(null);
   const [curX, setCurX] = useState(0);
   const [curY, setCurY] = useState(0);
@@ -42,6 +41,17 @@ function Main() {
 
   let clickX = 0;
   let clickY = 0;
+
+
+  useEffect(()=>{
+    const a = async()=>{
+      const NoticeData = await getMainData('api/notice');
+      console.log(NoticeData);
+      const ScheduleData = await getMainData('api/schedule');
+    }
+    a();
+  },[])
+
   return (
     <div>
     {isDropdownView !== null && <Dropdown 
