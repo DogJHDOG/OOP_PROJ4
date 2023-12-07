@@ -1,8 +1,9 @@
-import '../App.css';
+import '../Update.css';
 import React, { useState, useRef, useEffect } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import '/node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { EditorState, convertToRaw, Modifier } from 'draft-js';
+import { EditorState, convertToRaw, Modifier, ContentState } from 'draft-js';
+import htmlToDraft from 'html-to-draftjs';
 import styled from 'styled-components';
 import draftjsToHtml from 'draftjs-to-html';
 
@@ -32,9 +33,9 @@ function Checkbox({ children, disabled, checked, onChange }) {
 
 function CreatePage() {
 
-  const [calenderMemo, setCalenderMemo] = React.useState(false);
-  const [createNotice, setCreateNotice] = React.useState(false);
-  const [notice, setNotice] = React.useState(false);
+  const [calenderMemo, setCalenderMemo] = React.useState(true);
+  const [createNotice, setCreateNotice] = React.useState(true);
+  const [notice, setNotice] = React.useState(true);
   const [resource, setResource] = React.useState(false);
 
   //const [marketing, setMarketing] = React.useState(false);
@@ -43,6 +44,15 @@ function CreatePage() {
 
   useEffect(() => {
     focusEditor();
+    const blocksFromHtml = htmlToDraft(receivedHTML);
+    if (blocksFromHtml) {
+      const { contentBlocks, entityMap } = blocksFromHtml;
+
+      const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+
+      const editorState = EditorState.createWithContent(contentState);
+      setEditorState(editorState);
+    }
   }, []);
 
   const focusEditor = () => {
@@ -81,12 +91,13 @@ function CreatePage() {
   });
 
   let id = 0;
-  const [inputTitle, setInputTitle] = useState(null);
+  const [inputTitle, setInputTitle] = useState('PROJECT4 Announcement');
   const [convertedContent, setConvertedContent] = useState(null);
-  const [inputDay, setInputDay] = useState(null);
-  const [inputMemo, setInputMemo] = useState(null);
+  const [inputDay, setInputDay] = useState('2023-12-16');
+  const [inputMemo, setInputMemo] = useState('This is deadline of PROJ4');
   const [inputFile, setInputFile] = useState(null);
 
+  const receivedHTML = '<ul><li><strong>The deadline: 2023-12-09</strong></li><li><span style="color: rgb(0,0,0);font-size: medium;font-family: Arial;"><strong>in your final report, please include the result of UML modeling</strong></span></li><li><span style="color: rgb(0,0,0);font-size: medium;font-family: AppleSDGothicNeoM00;">If </span><span style="color: rgb(0,0,0);background-color: rgb(247,218,100);font-size: medium;font-family: AppleSDGothicNeoM00;">your team size is one</span><span style="color: rgb(0,0,0);font-size: medium;font-family: AppleSDGothicNeoM00;"> (meaning you are the only student in your team or you did not register a team), you are supposed to do project 1, 2, and 3 as individual project (no report, no presentation). In this case, however, you are supposed to do project 4 as team project, which means you should submit report and presentation video file (.mp4) as well as source code for project 4.</span></li><li>#Notice</li></ul>';
 
   const handleInputTitleChange = (event) => {
     setInputTitle(event.target.value);
@@ -132,7 +143,7 @@ function CreatePage() {
   return (
     <div className="App">
       <form><RealTitle>
-      <h1>Creating Page</h1></RealTitle>
+      <h1>Updating Page</h1></RealTitle>
       
       <Container>
       <Title>
@@ -392,7 +403,7 @@ function CreatePage() {
       event.preventDefault();
       handleButtonClick();
       //sendTextToEditor("#Notice");  
-    }}>Create</StyledButton>
+    }}>Save</StyledButton>
     </p>
     </form>
     </div>
