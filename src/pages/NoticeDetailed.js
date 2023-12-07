@@ -16,9 +16,9 @@ function NoticeDetailed() {
 
   const editorRef = useRef(null);
   //처음에 true 로딩이 다 됬을때 false
-  const [isLoading,setIsLoading] = useState(false);
+  const isLoading = false;
   //content가 제대로 왔을때 false, content가 제대로 오지 않았을때 true
-  const [isWrong,setIsWrong] = useState(false);
+  const isWrong = false;
 
 
   const focusEditor = () => {
