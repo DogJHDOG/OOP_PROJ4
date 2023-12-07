@@ -58,7 +58,12 @@ function Main() {
       </Login>
       <Title>2023.2 Object Oriented Programming</Title>
       {      
-      isAdmin ? (<CreateNewButton>Add Schedule</CreateNewButton>) : null
+      isAdmin ? (<CreateNewButton
+          onClick = {
+            ()=>{window.location.href='/1/1'}
+          }
+          >Add Schedule</CreateNewButton>) : 
+          null
       }    
     <Caldiv>
 
