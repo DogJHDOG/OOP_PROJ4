@@ -225,6 +225,7 @@ function NoticeDetailed() {
     onClick={(event) => {
       alert("Delete the notice");
       event.preventDefault();
+      navigate('/');
       //sendTextToEditor("#Notice");  
     }}>Delete</StyledButton2></div>
     </Border2></Title3></Container>
