@@ -94,7 +94,6 @@ function CreatePage() {
 
   const [pageId, setPageId] = useState(null);
 
-  let receivedHTML = '';
 
   const handleInputTitleChange = (event) => {
     setInputTitle(event.target.value);
@@ -129,10 +128,11 @@ function CreatePage() {
   const location = useLocation();
 
   useEffect(() => {
+    let receivedHTML = '';
     
     const fetchData = () => {
       
-      const state = location;
+     // const state = location;
       //console.log(state);
       const { responseUpdateData, getId } = location.state;
       setPageId(getId);
