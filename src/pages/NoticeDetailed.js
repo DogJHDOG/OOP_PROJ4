@@ -8,7 +8,6 @@ import htmlToDraft from 'html-to-draftjs';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import { useNavigate } from 'react-router-dom';
-import { getDetailNotice } from '../apis/Axios';
 import axios from 'axios';
 
 
