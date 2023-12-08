@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 
-const durl = "http://oop.cien.or.kr/api"
 
 export const getMainData = async(url)=>{
 

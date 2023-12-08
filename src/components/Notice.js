@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { getDetailNotice } from '../apis/Axios';
 
 const Title = styled.div`
   font-size: 32px;

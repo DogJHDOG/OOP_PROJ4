@@ -130,6 +130,26 @@ function CreatePage() {
     //console.log('Notice Tag: ', notice);
     //console.log('Resource Tag: ', resource);
 
+
+    function jsonToFormData(inputFile) {
+      const formData = new FormData();
+    
+      Object.keys(inputFile).forEach((key) => {
+        formData.append(key, inputFile[key]);
+      });
+    
+      return formData;
+    }
+
+    let formData = null;
+    if(inputFile!=null){
+      formData = jsonToFormData(inputFile);
+    }else{
+      formData = [];
+    }
+
+
+
     let tagName = null;
     let createData = null;
 
@@ -146,7 +166,8 @@ function CreatePage() {
         isCalendar: calenderMemo,
         tagName: tagName,
         memo: inputMemo,
-        time: inputDay
+        time: inputDay,
+        files : formData
       }
     } else if (calenderMemo === false) {
       createData = {
@@ -155,7 +176,9 @@ function CreatePage() {
         isCalendar: calenderMemo,
         tagName: tagName,
         //memo: inputMemo,
-        //time: inputDay
+        //time: inputDay,
+        files : formData
+
       }
     }
     
@@ -425,7 +448,7 @@ function CreatePage() {
       id = id + 1;
       event.preventDefault();
       handleButtonClick();
-      navigate('/');
+      // navigate('/');
       //sendTextToEditor("#Notice");  
     }}>Create</StyledButton>
     </p>
