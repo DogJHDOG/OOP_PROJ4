@@ -444,7 +444,10 @@ function CreatePage() {
     
     
     <p>
-    <StyledButton type='submit' onClick={(event) => {
+    <StyledButton type='submit' 
+    disabled={!notice && !resource}
+    onClick={(event) => {
+      
       id = id + 1;
       event.preventDefault();
       handleButtonClick();
