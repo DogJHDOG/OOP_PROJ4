@@ -129,7 +129,7 @@ function CreatePage() {
 
   useEffect(() => {
     let receivedHTML = '';
-    
+
     const fetchData = () => {
       
      // const state = location;
@@ -176,7 +176,7 @@ function CreatePage() {
 
     focusEditor();
 
-  }, []);
+  }, [location]);
 
   const handleButtonClick = async () => {
     //console.log('ID', id);
