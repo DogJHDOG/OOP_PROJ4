@@ -8,9 +8,12 @@ import htmlToDraft from 'html-to-draftjs';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import { useNavigate } from 'react-router-dom';
+import { getDetailNotice } from '../apis/Axios';
+import axios from 'axios';
 
 
 function NoticeDetailed() {
+  
 
   //const [marketing, setMarketing] = React.useState(false);
 
@@ -52,10 +55,20 @@ function NoticeDetailed() {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   useEffect(() => {
-    focusEditor();
-
     
-
+    const currentUrl = window.location.pathname; // 경로 부분만 가져오기
+    console.log(currentUrl)
+    const getDetailNotice = async () => {
+      try {
+        const response = await axios.get(`https://oop.cien.or.kr/api${currentUrl}`);
+        console.log(response.data);
+        return response.data;
+      } catch (error) {
+        return error;
+      }
+    };
+    getDetailNotice();
+    focusEditor();
     const blocksFromHtml = htmlToDraft(receivedHTML);
     if (blocksFromHtml) {
       const { contentBlocks, entityMap } = blocksFromHtml;
@@ -64,6 +77,7 @@ function NoticeDetailed() {
 
       const editorState = EditorState.createWithContent(contentState);
       setEditorState(editorState);
+      
     }
 
   }, []);

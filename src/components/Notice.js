@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { getDetailNotice } from '../apis/Axios';
 
 const Title = styled.div`
   font-size: 32px;
@@ -13,22 +14,18 @@ const Content = styled.div`
   margin-top: 16px; /* 콘텐츠 위에 간격 추가 */
 `;
 
-const Notice = ({ onClick }) => {
+const Notice = ({ title,content, noticeId}) => {
+
   return (
     <div>
-      <Title onClick={onClick}>
-        Project 4
+      <Title onClick={()=>{
+        window.location.href=`/notice/${noticeId}`
+      }}>
+        {title}
       </Title>
       <Content>
-        In your final report, please include the result of UML modeling (class diagram, use case diagram and activity diagram).
-        <br />
-        Introduction to UML
-        <br />
-        StarUML - Open Source UML Platform
-        <br />
-        Team-Project Presentation Schedule
-        <br />      
-        </Content>
+        <div dangerouslySetInnerHTML={{ __html: content }} />
+      </Content>
     </div>
   );
 };
