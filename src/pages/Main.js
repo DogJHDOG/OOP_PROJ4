@@ -46,8 +46,13 @@ const Main= ()=> {
 
   useEffect(()=>{
     const a = async()=>{
-      const NoticeData = await getMainData('/api/notice');
-      if(NoticeData!=null)setNoticeDiv(NoticeData[0]);
+      try{
+        const NoticeData = await getMainData('/api/notice');
+        if(NoticeData!=null)setNoticeDiv(NoticeData[0]);
+
+      }catch{
+        
+      }
       const ScheduleData = await getMainData('/api/schedule');
       console.log(ScheduleData);
 
