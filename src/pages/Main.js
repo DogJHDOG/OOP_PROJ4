@@ -34,6 +34,7 @@ const Main= ()=> {
     return result;
   }, []);
   const [isDropdownView, setDropdownView] = useState(null);
+  const [noticeDiv, setNoticeDiv] = useState([]);
   const [curX, setCurX] = useState(0);
   const [curY, setCurY] = useState(0);
   //useState로 나중에 넣기, admin임이 확인되면 생기는 버튼에 대한 처리
@@ -45,9 +46,11 @@ const Main= ()=> {
 
   useEffect(()=>{
     const a = async()=>{
-      const NoticeData = await getMainData('api/notice');
-      console.log(NoticeData);
-      const ScheduleData = await getMainData('api/schedule');
+      const NoticeData = await getMainData('/api/notice');
+      if(NoticeData!=null)setNoticeDiv(NoticeData[0]);
+      const ScheduleData = await getMainData('/api/schedule');
+      console.log(ScheduleData);
+
     }
     a();
   },[])
@@ -119,10 +122,14 @@ const Main= ()=> {
               window.location.href=`/project/04`
             }}
           ></Notice>
-          <Notice></Notice>
-          <Notice></Notice>
-          <Notice></Notice>
-          <Notice></Notice>
+          {
+            Array.isArray(noticeDiv) ? (
+              noticeDiv.map((notice, index) => {
+                console.log(notice.title)
+                return <Notice key={index} title={notice.title} content={notice.contents} noticeId={notice.noticeId}> </Notice>
+              })
+            ) : null
+          }
         </Noticediv>
         <Lecturediv>
           <NoticeTitle>
