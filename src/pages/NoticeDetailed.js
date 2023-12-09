@@ -98,57 +98,62 @@ function NoticeDetailed() {
         return error;
       }
     };
-
     const fetchData = async () => {
+
       try {
         const [responseData, fileData] = await getDetailNotice();
         
         console.log(responseData);
         console.log(fileData);
-  
+
         const fileCount = Object.keys(fileData).length;
         console.log(fileCount);  // 예상 출력: 3
-  
+
         for (let i = 0; i < Object.keys(fileData).length; i++) {
           setQnaFile(prevQnaFile => [
             ...prevQnaFile,
             { id: fileIdRef.current++, value: Object.keys(fileData)[i], url: `https://oop.cien.or.kr/download/${fileData[Object.keys(fileData)[i]]}` }
           ]);
         }
-  
+
+        handlefiledown();
+
         setResponseUpdateDate(responseData);
-  
+
         setInputTitle(responseData.title); // 제목 처리
         receivedHTML = responseData.contents; // 본문 처리
         const blocksFromHtml = htmlToDraft(receivedHTML);
         if (blocksFromHtml) {
           const { contentBlocks, entityMap } = blocksFromHtml;
-  
+
           const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
-  
+
           const editorState = EditorState.createWithContent(contentState);
           setEditorState(editorState);
-        }
-  
-        // 파일 처리 부분 (추가 필요)
-  
-        if (responseData.isCalendar === true) {
+      
+         }
+
+         // 파일 처리 부분 (추가 필요)
+
+         if (responseData.isCalendar === true) {
           setInputDay(responseData.schedule.time); // 시간 처리
           setInputMemo(responseData.schedule.memo); // 메모 처리
-        }
+         }
       } catch (error) {
         // 에러 처리
         console.error(error);
       }
     };
-  
+
     fetchData();
-  
-    handlefiledown(); // handlefiledown 호출 추가
-  
+
+
     //receivedHTML = responseData.contents; 
+
     focusEditor();
-  }, []);
+
+    
+  }, [fileIdRef.current]);
 
   const deletingNotice = async () => {
     try {
