@@ -43,7 +43,7 @@ function CreatePage() {
 
   useEffect(() => {
     const name = window.localStorage.getItem('admin');
-    if(name!='1234'){
+    if(name!=='1234'){
       window.location.href = '/';
     }
     focusEditor();
