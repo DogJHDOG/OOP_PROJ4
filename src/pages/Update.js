@@ -88,8 +88,8 @@ function CreatePage() {
   let id = 0;
   const [inputTitle, setInputTitle] = useState('');
   const [convertedContent, setConvertedContent] = useState(null);
-  const [inputDay, setInputDay] = useState('None');
-  const [inputMemo, setInputMemo] = useState('None');
+  const [inputDay, setInputDay] = useState('');
+  const [inputMemo, setInputMemo] = useState('');
   const [inputFile, setInputFile] = useState(null);
 
   const [pageId, setPageId] = useState(null);
@@ -165,6 +165,9 @@ function CreatePage() {
           setCalenderMemo(true);
           setInputDay(responseUpdateData.schedule.time); // 시간 처리
           setInputMemo(responseUpdateData.schedule.memo); // 메모 처리
+         }
+         else {
+          setCalenderMemo(false);
          }
          
     };
