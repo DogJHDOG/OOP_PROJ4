@@ -131,27 +131,11 @@ function CreatePage() {
     //console.log('Resource Tag: ', resource);
 
 
-    function jsonToFormData(inputFile) {
-      const formData = new FormData();
-    
-      Object.keys(inputFile).forEach((key) => {
-        formData.append(key, inputFile[key]);
-      });
-    
-      return formData;
-    }
-
-    let formData = null;
-    if(inputFile!=null){
-      formData = jsonToFormData(inputFile);
-    }else{
-      formData = [];
-    }
-
+    const formData = new FormData();
 
 
     let tagName = null;
-    let createData = null;
+    //let createData = null;
 
     if (notice === true) {
       tagName = 'Notice'
@@ -159,35 +143,49 @@ function CreatePage() {
       tagName = 'Resource'
     }
     
-    if (calenderMemo === true) {
-      createData = {
-        title: inputTitle,
-        contents: convertedContent,
-        isCalendar: calenderMemo,
-        tagName: tagName,
-        memo: inputMemo,
-        time: inputDay,
-        files : formData
-      }
-    } else if (calenderMemo === false) {
-      createData = {
-        title: inputTitle,
-        contents: convertedContent,
-        isCalendar: calenderMemo,
-        tagName: tagName,
-        //memo: inputMemo,
-        //time: inputDay,
-        files : formData
+    const headers = {};
 
+    if (inputFile !== null && inputFile.length > 0) {
+      headers['Content-Type'] = 'multipart/form-data';
+    }
+
+    if (calenderMemo === true) {
+      formData.append("title", inputTitle);
+      formData.append("contents", convertedContent);
+      formData.append("isCalendar", calenderMemo);
+      formData.append("tagName", tagName);
+      formData.append("memo", inputMemo);
+      formData.append("time", inputDay);
+
+      if (inputFile !== null) {
+        for (let i = 0; i < inputFile.length; i++) {
+          formData.append("files", inputFile[i]);
+        }
+      }
+      
+    } else if (calenderMemo === false) {
+      formData.append("title", inputTitle);
+      formData.append("contents", convertedContent);
+      formData.append("isCalendar", calenderMemo);
+      formData.append("tagName", tagName);
+      //formData.append("memo", inputMemo);
+      //formData.append("time", inputDay);
+      if (inputFile !== null) {
+        for (let i = 0; i < inputFile.length; i++) {
+          formData.append("files", inputFile[i]);
+        }
       }
     }
     
     try {
+      
       const response = await axios.post(
         'https://oop.cien.or.kr/api/notice',
-        createData
+        formData, {
+          headers: {headers},
+        }
       );
-  
+      console.log([...formData.entries()]);
       console.log('응답:', response.data);
       // 성공적인 경우 처리, 예를 들어 다른 페이지로 리다이렉트
       navigate('/');
