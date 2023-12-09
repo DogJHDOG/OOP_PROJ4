@@ -37,13 +37,17 @@ function CreatePage() {
   const [calenderMemo, setCalenderMemo] = React.useState(false);
   const [notice, setNotice] = React.useState(false);
   const [resource, setResource] = React.useState(false);
-
   //const [marketing, setMarketing] = React.useState(false);
 
   const editorRef = useRef(null);
 
   useEffect(() => {
+    const name = window.localStorage.getItem('admin');
+    if(name!='1234'){
+      window.location.href = '/';
+    }
     focusEditor();
+
   }, []);
 
   const focusEditor = () => {

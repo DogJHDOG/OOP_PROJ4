@@ -9,6 +9,7 @@ import NoticeDetailed from './pages/NoticeDetailed';
 import Update from './pages/Update';
 
 const App = () => {
+  
   return (
     <div>
       <Router>
