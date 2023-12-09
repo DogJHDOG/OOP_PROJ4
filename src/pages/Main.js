@@ -8,6 +8,7 @@ import 'tippy.js/dist/tippy.css';
 import 'tippy.js/themes/light.css';
 import Dropdown from '../components/Dropdown';
 import { getMainData } from '../apis/Axios';
+import Resource from '../components/Resource';
 
 
 var events ={
@@ -35,6 +36,8 @@ const Main= ()=> {
   }, []);
   const [isDropdownView, setDropdownView] = useState(null);
   const [noticeDiv, setNoticeDiv] = useState([]);
+  const [resourceDiv, setResourceDiv] = useState([]);
+
   const [curX, setCurX] = useState(0);
   const [curY, setCurY] = useState(0);
   //useState로 나중에 넣기, admin임이 확인되면 생기는 버튼에 대한 처리
@@ -48,13 +51,20 @@ const Main= ()=> {
     const a = async()=>{
       try{
         const NoticeData = await getMainData('/api/notice');
-        if(NoticeData!=null)setNoticeDiv(NoticeData[0]);
-
+        console.log(NoticeData[1])
+        if(NoticeData!=null){
+          setNoticeDiv(NoticeData[0]);
+          setResourceDiv(NoticeData[1]);
+        }
       }catch{
-        
+
       }
-      const ScheduleData = await getMainData('/api/schedule');
-      console.log(ScheduleData);
+      try{
+        const ScheduleData = await getMainData('/api/schedule');
+        console.log(ScheduleData);
+      }catch{
+
+      }
 
     }
     a();
@@ -130,7 +140,6 @@ const Main= ()=> {
           {
             Array.isArray(noticeDiv) ? (
               noticeDiv.map((notice, index) => {
-                console.log(notice.title)
                 return <Notice key={index} title={notice.title} content={notice.contents} noticeId={notice.noticeId}> </Notice>
               })
             ) : null
@@ -138,7 +147,13 @@ const Main= ()=> {
         </Noticediv>
         <Lecturediv>
           <NoticeTitle>
-            Lecture
+          {          
+            Array.isArray(resourceDiv) ? (
+              resourceDiv.map((resource, index) => {
+                return<Resource title={resource.title} content={resource.contents}></Resource>
+              })            
+            ): null
+          }
           </NoticeTitle>
         </Lecturediv>
       </Underdiv>
