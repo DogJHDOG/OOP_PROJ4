@@ -63,13 +63,13 @@ function NoticeDetailed() {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   
-  const handlefiledown = () => {
-    fileOptionRef.current = qnaFile.map(file => ({ value: file.value, label: file.value }));
-  }
-  
   useEffect(() => {
     
     //let fileId = 1;
+
+    const handlefiledown = () => {
+      fileOptionRef.current = qnaFile.map(file => ({ value: file.value, label: file.value }));
+    }
 
     let receivedHTML = '';
 
@@ -153,7 +153,7 @@ function NoticeDetailed() {
     focusEditor();
 
     
-  }, [fileIdRef.current]);
+  }, []);
 
   const deletingNotice = async () => {
     try {
