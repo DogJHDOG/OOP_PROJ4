@@ -51,10 +51,19 @@ const Login = () => {
   const handleEnterPress = (e) => {
     if (e.key === 'Enter') {
       console.log('비밀번호:', password);
+      if(password=='1234'){
+        window.localStorage.setItem('admin', '1234');
+        window.location.href='/'
+
+      }
     }
   }; 
   const handleLoginButtonClick = () => {
     console.log('비밀번호:', password);
+    if(password=='1234'){
+      window.localStorage.setItem('admin', '1234');
+      window.location.href='/'
+    }
   }; 
   return (
     <Container>
