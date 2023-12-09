@@ -71,7 +71,7 @@ const Main= ()=> {
 
     }
     a();
-    if(name=='1234'){
+    if(name==='1234'){
       setIsAdmin(false);
     }
   },[])
