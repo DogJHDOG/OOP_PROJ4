@@ -103,8 +103,10 @@ function CreatePage() {
 
     
     const rawContentState = convertToRaw(editorState.getCurrentContent());
-    const html = draftjsToHtml(rawContentState);
+    let html = draftjsToHtml(rawContentState);
     //html = convertToHTML((convertToRaw(editorState.getCurrentContent())));
+    console.log(html);
+    html = html + '<p><a href="">adsfasdf</a></p>';
     setConvertedContent(html);
 
   };
