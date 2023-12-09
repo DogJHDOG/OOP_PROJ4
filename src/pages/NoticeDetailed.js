@@ -14,6 +14,7 @@ import axios from 'axios';
 function NoticeDetailed() {
   
 
+
   //const [marketing, setMarketing] = React.useState(false);
 
   const editorRef = useRef(null);
@@ -45,42 +46,97 @@ function NoticeDetailed() {
   //const defaultOption = qnaFile[0].value;
   const defaultOption = 'Select';
 
-  const [inputTitle, setInputTitle] = useState('PROJECT4 Announcement');
-  const [inputDay, setInputDay] = useState('2023-12-16');
-  const [inputMemo] = useState('This is deadline of PROJ4');
+  const [inputTitle, setInputTitle] = useState('None');
+  const [inputDay, setInputDay] = useState('None');
+  const [inputMemo, setInputMemo] = useState('None');
 
-  const receivedHTML = '<ul><li><strong>The deadline: 2023-12-09</strong></li><li><span style="color: rgb(0,0,0);font-size: medium;font-family: Arial;"><strong>in your final report, please include the result of UML modeling</strong></span></li><li><span style="color: rgb(0,0,0);font-size: medium;font-family: AppleSDGothicNeoM00;">If </span><span style="color: rgb(0,0,0);background-color: rgb(247,218,100);font-size: medium;font-family: AppleSDGothicNeoM00;">your team size is one</span><span style="color: rgb(0,0,0);font-size: medium;font-family: AppleSDGothicNeoM00;"> (meaning you are the only student in your team or you did not register a team), you are supposed to do project 1, 2, and 3 as individual project (no report, no presentation). In this case, however, you are supposed to do project 4 as team project, which means you should submit report and presentation video file (.mp4) as well as source code for project 4.</span></li><li>#Notice</li></ul>';
-  
+  const [responseUpdateData, setResponseUpdateDate] = useState();
+  const [getId, setGetId] = useState();
+  const [deleteUrl, setDeleteUrl] = useState();
+
+  //let receivedHTML = '<ul><li><strong>The deadline: 2023-12-09</strong></li><li><span style="color: rgb(0,0,0);font-size: medium;font-family: Arial;"><strong>in your final report, please include the result of UML modeling</strong></span></li><li><span style="color: rgb(0,0,0);font-size: medium;font-family: AppleSDGothicNeoM00;">If </span><span style="color: rgb(0,0,0);background-color: rgb(247,218,100);font-size: medium;font-family: AppleSDGothicNeoM00;">your team size is one</span><span style="color: rgb(0,0,0);font-size: medium;font-family: AppleSDGothicNeoM00;"> (meaning you are the only student in your team or you did not register a team), you are supposed to do project 1, 2, and 3 as individual project (no report, no presentation). In this case, however, you are supposed to do project 4 as team project, which means you should submit report and presentation video file (.mp4) as well as source code for project 4.</span></li><li>#Notice</li></ul>';
+
+
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   useEffect(() => {
     
+    let receivedHTML = '';
+    
     const currentUrl = window.location.pathname; // 경로 부분만 가져오기
+    setDeleteUrl(currentUrl);
+    const id = parseInt(currentUrl.split("/").pop());
+    setGetId(id);
+
+
     console.log(currentUrl)
     const getDetailNotice = async () => {
       try {
         const response = await axios.get(`https://oop.cien.or.kr/api${currentUrl}`);
-        console.log(response.data);
+        //console.log(response.data);
         return response.data;
       } catch (error) {
         return error;
       }
     };
-    getDetailNotice();
-    focusEditor();
-    const blocksFromHtml = htmlToDraft(receivedHTML);
-    if (blocksFromHtml) {
-      const { contentBlocks, entityMap } = blocksFromHtml;
+    const fetchData = async () => {
+      try {
+        const responseData = await getDetailNotice();
+        
+        console.log(responseData);
 
-      const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+        setResponseUpdateDate(responseData);
 
-      const editorState = EditorState.createWithContent(contentState);
-      setEditorState(editorState);
+        setInputTitle(responseData.title); // 제목 처리
+        receivedHTML = responseData.contents; // 본문 처리
+        const blocksFromHtml = htmlToDraft(receivedHTML);
+        if (blocksFromHtml) {
+          const { contentBlocks, entityMap } = blocksFromHtml;
+
+          const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+
+          const editorState = EditorState.createWithContent(contentState);
+          setEditorState(editorState);
       
-    }
+         }
 
+         // 파일 처리 부분 (추가 필요)
+
+         if (responseData.isCalendar === true) {
+          setInputDay(responseData.schedule.time); // 시간 처리
+          setInputMemo(responseData.schedule.memo); // 메모 처리
+         }
+      } catch (error) {
+        // 에러 처리
+        console.error(error);
+      }
+    };
+
+    fetchData();
+
+
+    //receivedHTML = responseData.contents; 
+
+    focusEditor();
+
+    
   }, []);
 
+  const deletingNotice = async () => {
+    try {
+      const url = deleteUrl;
+      await axios.delete(`https://oop.cien.or.kr/api${url}`);
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const handleNavigate = () => {
+    //console.log(responseUpdateData);
+    //console.log(getId);
+    navigate('/Update', { state: { responseUpdateData, getId } });
+  };
 
   const handleFileChange = (selected) => {
     setSelectedFile(selected);
@@ -149,7 +205,7 @@ function NoticeDetailed() {
          <div className='Notice'>
   
           
-          <Container><Title>
+          <Container><Title2>
          <div className='Editor'>
         <Editor
           
@@ -162,15 +218,22 @@ function NoticeDetailed() {
           name='Body'
           editorState={editorState}
           wrapperClassName='wrapperClassName'
-          editorClassName="editorClassName"
-          wrapperStyle={{textAlignment: 'center'}}
-          editorStyle={{height: "500px",
-                        
+          //toolbarClassName='toolberClassName'
+          //editorClassName="editorClassName"
+          wrapperStyle={{textAlignment: 'flex-start',
+                          width: '100%',
+                          //border: '1px solid rgb(84, 84, 84)',
+                          }}
+                          
+          editorStyle={{height: "100%",
+                        backgroundColor: 'rgb(255,255,255)',
+                        overflowY: 'auto',
                       textAlignment: 'center'}}      
-          toolbarHidden = {true}
+          //toolbarHidden = {true}
+          toolbarStyle={{display: 'none'}}
           
           onEditorStateChange={onEditorStateChange}
-        /></div></Title></Container>
+        /></div></Title2></Container>
   
         <Container>
         <Title>
@@ -195,7 +258,7 @@ function NoticeDetailed() {
         <article>
         <Container><Title>
         <div className='AllowNotice'>
-          <p><input name='Calender' disabled={true} placeholder='Ex) 2022-12-04'
+          <p><input name='Calender' disabled={true} 
           value={inputDay}
           onChange={handleInputDayChange}
           ></input></p></div>
@@ -235,7 +298,7 @@ function NoticeDetailed() {
       type='submit' 
       onClick={(event) => {
         event.preventDefault();
-        navigate('/Update');
+        handleNavigate(); 
   
         //sendTextToEditor("#Notice");  
       }}>Update</StyledButton> </div>
@@ -247,6 +310,7 @@ function NoticeDetailed() {
       
       onClick={(event) => {
         alert("Delete the notice");
+        deletingNotice();
         event.preventDefault();
         navigate('/');
         //sendTextToEditor("#Notice");  

@@ -6,7 +6,7 @@ import { EditorState, convertToRaw, Modifier, ContentState } from 'draft-js';
 import htmlToDraft from 'html-to-draftjs';
 import styled from 'styled-components';
 import draftjsToHtml from 'draftjs-to-html';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 function Checkbox({ children, disabled, checked, onChange }) {
@@ -42,20 +42,13 @@ function CreatePage() {
 
   //const [marketing, setMarketing] = React.useState(false);
 
+
+  //처음에 true 로딩이 다 됬을때 false
+  const isLoading = false;
+  //content가 제대로 왔을때 false, content가 제대로 오지 않았을때 true
+  const isWrong = false;
+
   const editorRef = useRef(null);
-
-  useEffect(() => {
-    focusEditor();
-    const blocksFromHtml = htmlToDraft(receivedHTML);
-    if (blocksFromHtml) {
-      const { contentBlocks, entityMap } = blocksFromHtml;
-
-      const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
-
-      const editorState = EditorState.createWithContent(contentState);
-      setEditorState(editorState);
-    }
-  }, []);
 
   const focusEditor = () => {
     if (editorRef.current) {
@@ -93,13 +86,14 @@ function CreatePage() {
   });
 
   let id = 0;
-  const [inputTitle, setInputTitle] = useState('PROJECT4 Announcement');
+  const [inputTitle, setInputTitle] = useState('');
   const [convertedContent, setConvertedContent] = useState(null);
-  const [inputDay, setInputDay] = useState('2023-12-16');
-  const [inputMemo, setInputMemo] = useState('This is deadline of PROJ4');
+  const [inputDay, setInputDay] = useState('');
+  const [inputMemo, setInputMemo] = useState('');
   const [inputFile, setInputFile] = useState(null);
 
-  const receivedHTML = '<ul><li><strong>The deadline: 2023-12-09</strong></li><li><span style="color: rgb(0,0,0);font-size: medium;font-family: Arial;"><strong>in your final report, please include the result of UML modeling</strong></span></li><li><span style="color: rgb(0,0,0);font-size: medium;font-family: AppleSDGothicNeoM00;">If </span><span style="color: rgb(0,0,0);background-color: rgb(247,218,100);font-size: medium;font-family: AppleSDGothicNeoM00;">your team size is one</span><span style="color: rgb(0,0,0);font-size: medium;font-family: AppleSDGothicNeoM00;"> (meaning you are the only student in your team or you did not register a team), you are supposed to do project 1, 2, and 3 as individual project (no report, no presentation). In this case, however, you are supposed to do project 4 as team project, which means you should submit report and presentation video file (.mp4) as well as source code for project 4.</span></li><li>#Notice</li></ul>';
+  const [pageId, setPageId] = useState(null);
+
 
   const handleInputTitleChange = (event) => {
     setInputTitle(event.target.value);
@@ -131,6 +125,61 @@ function CreatePage() {
   };
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    let receivedHTML = '';
+
+    const fetchData = () => {
+      
+     // const state = location;
+      //console.log(state);
+      const { responseUpdateData, getId } = location.state;
+      setPageId(getId);
+
+        console.log(responseUpdateData);
+        
+        setInputTitle(responseUpdateData.title); // 제목 처리
+        receivedHTML = responseUpdateData.contents; // 본문 처리
+        const blocksFromHtml = htmlToDraft(receivedHTML);
+        if (blocksFromHtml) {
+          const { contentBlocks, entityMap } = blocksFromHtml;
+
+          const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+
+          const editorState = EditorState.createWithContent(contentState);
+          setEditorState(editorState);
+      
+         }
+
+         // 파일 처리 부분 (추가 필요)
+
+         if (responseUpdateData.tagName === 'Notice') {
+          setNotice(true);
+         } else if (responseUpdateData.tagName === 'Resource') {
+          setResource(true);
+         }
+
+
+         if (responseUpdateData.isCalendar === true) {
+          setCalenderMemo(true);
+          setInputDay(responseUpdateData.schedule.time); // 시간 처리
+          setInputMemo(responseUpdateData.schedule.memo); // 메모 처리
+         }
+         else {
+          setCalenderMemo(false);
+         }
+         
+    };
+
+    fetchData();
+
+
+    //receivedHTML = responseData.contents; 
+
+    focusEditor();
+
+  }, [location]);
 
   const handleButtonClick = async () => {
     //console.log('ID', id);
@@ -171,9 +220,10 @@ function CreatePage() {
       }
     }
     
+
     try {
       const response = await axios.put(
-        'https://oop.cien.or.kr/api/notice',
+        `https://oop.cien.or.kr/api/notice/${pageId}`,
         createData
       );
   
@@ -189,7 +239,10 @@ function CreatePage() {
   };
 
   return (
-    <div className="App">
+    <div className="App"> 
+    {
+      isLoading ? <h1> loading</h1>: 
+      isWrong ? <h1>404</h1> :
       <form><RealTitle>
       <h1>Updating Page</h1></RealTitle>
       
@@ -433,7 +486,9 @@ function CreatePage() {
     
     
     <p>
-    <StyledButton type='submit' onClick={(event) => {
+    <StyledButton type='submit' 
+    disabled={!notice && !resource}
+    onClick={(event) => {
       id = id + 1;
       event.preventDefault();
       handleButtonClick();
@@ -442,6 +497,8 @@ function CreatePage() {
     }}>Save</StyledButton>
     </p>
     </form>
+
+    }
     </div>
   );
 }
