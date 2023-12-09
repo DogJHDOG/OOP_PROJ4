@@ -13,7 +13,8 @@ import axios from 'axios';
 
 function NoticeDetailed() {
   
-
+  const fileOptionRef = useRef([]);
+  const fileIdRef = useRef(1); // fileId를 useRef로 관리
 
   //const [marketing, setMarketing] = React.useState(false);
 
@@ -37,11 +38,13 @@ function NoticeDetailed() {
 
   const [selectedFileUrl, setSelectedFileUrl] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
-  const [qnaFile] = useState([
-    { id: 1, value: '1.txt', url: 'https://example.com/1.txt' },
-    { id: 2, value: '2.txt', url: 'https://example.com/2.txt' }
+  const [qnaFile, setQnaFile] = useState([
+    //{ id: 1, value: '1.txt', url: 'https://example.com/1.txt' },
+    //{ id: 2, value: '2.txt', url: 'https://example.com/2.txt' }
   ]);
-  const fileOption = qnaFile.map(file => ({ value: file.value, label: file.value })); // 변경된 부분
+
+  let fileOption = qnaFile.map(file => ({ value: file.value, label: file.value }));;
+
 
   //const defaultOption = qnaFile[0].value;
   const defaultOption = 'Select';
@@ -59,31 +62,61 @@ function NoticeDetailed() {
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
+  
   useEffect(() => {
     
+    //let fileId = 1;
+
+    const handlefiledown = () => {
+      fileOptionRef.current = qnaFile.map(file => ({ value: file.value, label: file.value }));
+    }
+
     let receivedHTML = '';
-    
+
     const currentUrl = window.location.pathname; // 경로 부분만 가져오기
     setDeleteUrl(currentUrl);
+
     const id = parseInt(currentUrl.split("/").pop());
     setGetId(id);
 
+    console.log(id);
 
-    console.log(currentUrl)
+    const noticeUrl = `https://oop.cien.or.kr/api${currentUrl}`;
+    const fileUrl = `https://oop.cien.or.kr/api/notice/file/${id}`;
+
+    console.log(noticeUrl)
+    console.log(fileUrl)
     const getDetailNotice = async () => {
       try {
-        const response = await axios.get(`https://oop.cien.or.kr/api${currentUrl}`);
+        const [response, fileResponse] = await Promise.all([
+          axios.get(noticeUrl),
+          axios.get(fileUrl)
+        ]);
         //console.log(response.data);
-        return response.data;
+        return [response.data, fileResponse.data];
       } catch (error) {
         return error;
       }
     };
     const fetchData = async () => {
+
       try {
-        const responseData = await getDetailNotice();
+        const [responseData, fileData] = await getDetailNotice();
         
         console.log(responseData);
+        console.log(fileData);
+
+        const fileCount = Object.keys(fileData).length;
+        console.log(fileCount);  // 예상 출력: 3
+
+        for (let i = 0; i < Object.keys(fileData).length; i++) {
+          setQnaFile(prevQnaFile => [
+            ...prevQnaFile,
+            { id: fileIdRef.current++, value: Object.keys(fileData)[i], url: `https://oop.cien.or.kr/download/${fileData[Object.keys(fileData)[i]]}` }
+          ]);
+        }
+
+        handlefiledown();
 
         setResponseUpdateDate(responseData);
 
@@ -149,16 +182,6 @@ function NoticeDetailed() {
 
       // Set the selected file's URL
       setSelectedFileUrl(selectedFile.url);
-    }
-  };
-
-  const handleDownloadClick = () => {
-    if (selectedFile && selectedFileUrl) {
-      // Use the selected file's URL to create a download link
-      const downloadLink = document.createElement('a');
-      downloadLink.href = selectedFileUrl;
-      downloadLink.download = selectedFile.value;
-      downloadLink.click();
     }
   };
 
@@ -242,8 +265,8 @@ function NoticeDetailed() {
         <SelectedFileUrl>
               {selectedFileUrl && (
                 <p>
-                  <strong style={{marginRight: '0.3rem'}}>Selected File URL:</strong> {selectedFileUrl}
-                  <button style={{marginLeft: '0.5rem'}} onClick={handleDownloadClick}>Download</button>
+                  <strong style={{marginRight: '0.3rem'}}>Selected File URL:</strong> <a href={selectedFileUrl} download>download</a>
+                  
                 </p>
               )}
             </SelectedFileUrl>
