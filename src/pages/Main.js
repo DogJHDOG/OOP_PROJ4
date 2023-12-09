@@ -41,13 +41,16 @@ const Main= ()=> {
   const [curX, setCurX] = useState(0);
   const [curY, setCurY] = useState(0);
   //useState로 나중에 넣기, admin임이 확인되면 생기는 버튼에 대한 처리
-  const isAdmin = true;
+  const [isAdmin,setIsAdmin] = useState(true);
 
   let clickX = 0;
   let clickY = 0;
 
 
   useEffect(()=>{
+
+    const name = window.localStorage.getItem('admin');
+    console.log(name);
     const a = async()=>{
       try{
         const NoticeData = await getMainData('/api/notice');
@@ -68,6 +71,9 @@ const Main= ()=> {
 
     }
     a();
+    if(name=='1234'){
+      setIsAdmin(false);
+    }
   },[])
 
   return (
@@ -79,19 +85,24 @@ const Main= ()=> {
       setDropdownView={setDropdownView}
     /> }    
     <Container>
-      <Login onClick={
+      {isAdmin ? (<Login onClick={
         ()=>{window.location.href=`/login`}
       }>
         로그인
-      </Login>
+      </Login>):
+      (<Login onClick={
+        ()=>{
+          window.localStorage.removeItem('admin')
+          setIsAdmin(true)
+        }}>로그아웃</Login>)}
       <Title>2023.2 Object Oriented Programming</Title>
       {      
-      isAdmin ? (<CreateNewButton
+      isAdmin ? null:(<CreateNewButton
           onClick = {
             ()=>{window.location.href='/createPage'}
           }
-          >Add Schedule</CreateNewButton>) : 
-          null
+          >Add Schedule</CreateNewButton>) 
+          
       }    
     <Caldiv>
 
