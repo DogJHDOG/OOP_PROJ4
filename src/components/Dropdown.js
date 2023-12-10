@@ -13,7 +13,7 @@ const Dropdown = ({ x, y, eventsArray, setDropdownView }) => {
           <CalDiv key={i} onClick={() =>window.location.href=`/notice/${event.noticeId}` }>
             <div>
               <div>{`Title: ${event.title}`}</div>
-              <div>{`Memo: ${event.memo}`}</div>
+              <div>{`Memo: ${event.schedule.memo}`}</div>
             </div>
           </CalDiv>
         ))}
