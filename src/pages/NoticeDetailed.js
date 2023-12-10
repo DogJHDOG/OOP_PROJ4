@@ -13,7 +13,7 @@ import axios from 'axios';
 
 function NoticeDetailed() {
   
-  const fileOptionRef = useRef([]);
+  //const fileOptionRef = useRef([]);
   const fileIdRef = useRef(1); // fileId를 useRef로 관리
 
   //const [marketing, setMarketing] = React.useState(false);
@@ -39,15 +39,15 @@ function NoticeDetailed() {
   const [selectedFileUrl, setSelectedFileUrl] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [qnaFile, setQnaFile] = useState([
-    { id: 1, value: 'Project4_announcement.pdf', url: 'https://example.com/Project4_announcement.pdf' },
-    { id: 2, value: 'Introduction of UML.txt', url: 'https://example.com/Introduction of UML.txt' }
+    //{ id: 1, value: 'Project4_announcement.pdf', url: 'https://example.com/Project4_announcement.pdf' },
+    //{ id: 2, value: 'Introduction of UML.txt', url: 'https://example.com/Introduction of UML.txt' }
   ]);
 
   //let fileOption = {value: '1.txt', url: 'https://example.com/1.txt'};
   //let fileOption = qnaFile.map(file => ({ value: file.value, label: file.value }));;
 
-  let fileOption = [{value: 'Project4_announcement.pdf', label: 'Project4_announcement.pdf'},
-  {value: 'Introduction of UML.txt', label: 'Introduction of UML.txt' }];
+  const [fileOption, setFileOption] = useState([{value: 'Project4_announcement.pdf', label: 'Project4_announcement.pdf'},
+  {value: 'Introduction of UML.txt', label: 'Introduction of UML.txt' }]);
 
 
   //const defaultOption = qnaFile[0].value;
@@ -66,15 +66,12 @@ function NoticeDetailed() {
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
+  let file = null;
   
   useEffect(() => {
     
     //let fileId = 1;
 
-    /*
-    const handlefiledown = () => {
-      fileOptionRef.current = qnaFile.map(file => ({ value: file.value, label: file.value }));
-    }*/
 
     let receivedHTML = '';
 
@@ -111,19 +108,37 @@ function NoticeDetailed() {
         console.log(responseData);
         console.log(fileData);
 
+        file = fileData;
+
         const fileCount = Object.keys(fileData).length;
         console.log(fileCount);  // 예상 출력: 3
 
+
+        const updatedQnaFile = Object.keys(fileData).map((key, index) => ({
+          id: fileIdRef.current + index,
+          value: key,
+          url: `https://oop.cien.or.kr/download/${fileData[key]}`,
+        }));
+
+        setQnaFile(updatedQnaFile);
+
+        const updatedFileOption = updatedQnaFile.map(file => ({
+          value: file.value,
+          label: file.value,
+        }));
+
+        setFileOption(updatedFileOption);
         /*
         for (let i = 0; i < Object.keys(fileData).length; i++) {
           setQnaFile(prevQnaFile => [
             ...prevQnaFile,
             { id: fileIdRef.current++, value: Object.keys(fileData)[i], url: `https://oop.cien.or.kr/download/${fileData[Object.keys(fileData)[i]]}` }
           ]);
-        }
-        */
+          console.log(qnaFile)
+        }*/
+        
 
-        //handlefiledown();
+        console.log(fileOption);
 
         setResponseUpdateDate(responseData);
 
@@ -197,7 +212,8 @@ function NoticeDetailed() {
   const handleNavigate = () => {
     //console.log(responseUpdateData);
     //console.log(getId);
-    navigate('/Update', { state: { responseUpdateData, getId } });
+    console.log(file);
+    navigate('/Update', { state: { responseUpdateData, getId, file } });
   };
 
   const handleFileChange = (selected) => {
