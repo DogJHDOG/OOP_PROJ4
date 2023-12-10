@@ -9,18 +9,25 @@ import 'tippy.js/themes/light.css';
 import Dropdown from '../components/Dropdown';
 import { getMainData } from '../apis/Axios';
 import Resource from '../components/Resource';
+import axios from 'axios';
+import { notice } from '../const';
 
 
 var events ={
+  
   '2023-12-20':[            
-  { title: '기말고사 시험1', date: '2023-12-20' ,memo:'a'},
-  { title: '기말고사 시험2', date: '2023-12-20' ,memo:'a'},
-  { title: '기말고사 시험3', date: '2023-12-20' ,memo:'a'},
-  { title: '기말고사 시험4', date: '2023-12-20' ,memo:'a'},
-  { title: '기말고사 시험', date: '2023-12-20' ,memo:'a'},
+  { title: '기말고사 시험1', date: '2023-12-20' ,memo:'a',noticeId:'1'},
+  { title: '기말고사 시험2', date: '2023-12-20' ,memo:'a',noticeId:'2'},
+  { title: '기말고사 시험3', date: '2023-12-20' ,memo:'a',noticeId:'3'},
+  { title: '기말고사 시험4', date: '2023-12-20' ,memo:'a',noticeId:'4'},
+  { title: '기말고사 시험', date: '2023-12-20' ,memo:'a',noticeId:'5'},
   ],
-  '2023-12-19':[
-    { title: '기말고사 시험', date: '2023-12-19' ,memo:'a'},
+  '2023-12-09':[
+    {title:'PROJECT4 Announcement' ,date:'2023-12-09',memo:'과제 열심히 하세요 ..',noticeId:'6'},
+    {title:'PROJECT4 Announcement' ,date:'2023-12-09',memo:'과제 열심히 하세요 ..',noticeId:'7'},
+    {title:'PROJECT4 Announcement' ,date:'2023-12-09',memo:'과제 열심히 하세요 ..',noticeId:'8'},
+    {title:'PROJECT4 Announcement' ,date:'2023-12-09',memo:'과제 열심히 하세요 ..',noticeId:'9'},
+
   ]
   
 }
@@ -29,15 +36,17 @@ var events ={
 const Main= ()=> {
 
 
-  const newArray = Object.entries(events).reduce((result, [date, eventsList]) => {
-    const transformedEvents = eventsList.map(({ title, date }) => ({ title, date }));
-    result.push(...transformedEvents);
-    return result;
-  }, []);
+  // var newArray = Object.entries(events).reduce((result, [date, eventsList]) => {
+  //   const transformedEvents = eventsList.map(({ title, date }) => ({ title, date }));
+  //   result.push(...transformedEvents);
+  //   return result;
+  // }, []);
   const [isDropdownView, setDropdownView] = useState(null);
+  const [scheduleDiv, setScheduleDiv] = useState([]);
+  const [resced, setresced] = useState([]);
+
   const [noticeDiv, setNoticeDiv] = useState([]);
   const [resourceDiv, setResourceDiv] = useState([]);
-
   const [curX, setCurX] = useState(0);
   const [curY, setCurY] = useState(0);
   //useState로 나중에 넣기, admin임이 확인되면 생기는 버튼에 대한 처리
@@ -45,35 +54,70 @@ const Main= ()=> {
 
   let clickX = 0;
   let clickY = 0;
+  
 
+  const handleScedule = async()=>{
+    console.log(2)
+    try{
+       const ScheduleData = await getMainData('/api/schedule');
+        setScheduleDiv(ScheduleData);
+       console.log(ScheduleData);
+        
+    }catch(error){
+        console.log(error);
+    }
+  }
+  const handlenotice = async()=>{
+    console.log(2)
+    try{
+       const noticeData = await getMainData('/api/notice');
+       setNoticeDiv(noticeData[0]);
+       setResourceDiv(noticeData[1]);
+
+        console.log(noticeData);
+    }catch(error){
+        console.log(error);
+    }
+  }
 
   useEffect(()=>{
 
+    setNoticeDiv(notice);
     const name = window.localStorage.getItem('admin');
-    console.log(name);
-    const a = async()=>{
-      try{
-        const NoticeData = await getMainData('/api/notice');
-        console.log(NoticeData[1])
-        if(NoticeData!=null){
-          setNoticeDiv(NoticeData[0]);
-          setResourceDiv(NoticeData[1]);
-        }
-      }catch{
-
-      }
-      try{
-        const ScheduleData = await getMainData('/api/schedule');
-        console.log(ScheduleData);
-      }catch{
-
-      }
-
-    }
-    a();
-    if(name==='1234'){
+    if (name === '1234') {
+      console.log(1);
       setIsAdmin(false);
     }
+
+    const fetchData = async () => {
+      console.log(1);
+      try {
+        handlenotice();
+      } catch (error) {
+        console.log(error);
+      }
+      try{
+        handleScedule();
+        const calendarEvents = Object.entries(scheduleDiv).reduce((result, [date, eventsList]) => {
+          const transformedEvents = eventsList.map(({ title }) => ({ title :title, date: date }));
+          result.push(...transformedEvents);
+          return result;
+        }, []);
+        
+        console.log(calendarEvents)
+        setresced(calendarEvents);
+      }catch(error){
+        console.log(error);
+      }
+    };
+  
+     fetchData();
+      // try{
+      //   const ScheduleData = await getMainData('/api/schedule');
+      //   console.log(ScheduleData);
+      // }catch(error){
+      //   console.log(error);
+      // }
   },[])
 
   return (
@@ -132,7 +176,7 @@ const Main= ()=> {
               // 기본 동작을 막고자 할 때는 아래와 같이 preventDefault()를 호출합니다.
             }}
           
-            events={newArray}
+            events={resced}
 
 
   
@@ -158,14 +202,21 @@ const Main= ()=> {
         </Noticediv>
         <Lecturediv>
           <NoticeTitle>
-          {          
+ 
+
+          Resource
+          </NoticeTitle>
+                   {          
             Array.isArray(resourceDiv) ? (
               resourceDiv.map((resource, index) => {
                 return<Resource title={resource.title} content={resource.contents}></Resource>
               })            
             ): null
           }
-          </NoticeTitle>
+          <Resource title={'Ch01'} content={'About the ch01 lecture'}></Resource>
+          <Resource title={'Ch02'} content={'About the ch02 lecture'}></Resource>
+          <Resource title={'Ch03'} content={'About the ch03 lecture'}></Resource>
+          <Resource title={'Ch04'} content={'About the ch04 lecture'}></Resource>
         </Lecturediv>
       </Underdiv>
     </Container>
@@ -244,6 +295,7 @@ const Lecturediv = styled.div`
   width : 40%;
   height:auto;
   display: flex;
+  gap : 40px;
   flex-direction : column;
 
 ` 

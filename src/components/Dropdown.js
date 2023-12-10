@@ -10,12 +10,12 @@ const Dropdown = ({ x, y, eventsArray, setDropdownView }) => {
 
       <ul>
         {eventsArray.map((event, i) => (
-          <li key={i} onClick={() => console.log(`Dropdown${i + 1}`)}>
+          <CalDiv key={i} onClick={() =>window.location.href=`/notice/${event.noticeId}` }>
             <div>
               <div>{`Title: ${event.title}`}</div>
               <div>{`Memo: ${event.memo}`}</div>
             </div>
-          </li>
+          </CalDiv>
         ))}
       </ul>
     </Dropdiv>
@@ -33,8 +33,10 @@ const Dropdiv = styled.div`
   z-index: 100;
   width: 80vh;
   height: 80vh;
-  background-color: #ffffff; /* 배경 색상 추가 */
+  background-color: #F8F9FA;
+  overflow: auto; /* 스크롤이 가능하도록 설정 */
 `;
+
 
 const CloseButton = styled.div`
   position: absolute;
@@ -43,5 +45,14 @@ const CloseButton = styled.div`
   cursor: pointer;
   font-size: 20px;
   color: #333; /* X 마크의 색상 설정 */
+`;
+
+const CalDiv = styled.ul`
+  width: 90%;
+  height: 100px;
+  border-bottom: 1px solid #000; /* 짝대기 스타일 지정 */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 `;
 
