@@ -39,11 +39,15 @@ function NoticeDetailed() {
   const [selectedFileUrl, setSelectedFileUrl] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [qnaFile, setQnaFile] = useState([
-    //{ id: 1, value: '1.txt', url: 'https://example.com/1.txt' },
-    //{ id: 2, value: '2.txt', url: 'https://example.com/2.txt' }
+    { id: 1, value: 'Project4_announcement.pdf', url: 'https://example.com/Project4_announcement.pdf' },
+    { id: 2, value: 'Introduction of UML.txt', url: 'https://example.com/Introduction of UML.txt' }
   ]);
 
-  let fileOption = qnaFile.map(file => ({ value: file.value, label: file.value }));;
+  //let fileOption = {value: '1.txt', url: 'https://example.com/1.txt'};
+  //let fileOption = qnaFile.map(file => ({ value: file.value, label: file.value }));;
+
+  let fileOption = [{value: 'Project4_announcement.pdf', label: 'Project4_announcement.pdf'},
+  {value: 'Introduction of UML.txt', label: 'Introduction of UML.txt' }];
 
 
   //const defaultOption = qnaFile[0].value;
@@ -67,9 +71,10 @@ function NoticeDetailed() {
     
     //let fileId = 1;
 
+    /*
     const handlefiledown = () => {
       fileOptionRef.current = qnaFile.map(file => ({ value: file.value, label: file.value }));
-    }
+    }*/
 
     let receivedHTML = '';
 
@@ -109,14 +114,16 @@ function NoticeDetailed() {
         const fileCount = Object.keys(fileData).length;
         console.log(fileCount);  // 예상 출력: 3
 
+        /*
         for (let i = 0; i < Object.keys(fileData).length; i++) {
           setQnaFile(prevQnaFile => [
             ...prevQnaFile,
             { id: fileIdRef.current++, value: Object.keys(fileData)[i], url: `https://oop.cien.or.kr/download/${fileData[Object.keys(fileData)[i]]}` }
           ]);
         }
+        */
 
-        handlefiledown();
+        //handlefiledown();
 
         setResponseUpdateDate(responseData);
 
@@ -140,8 +147,30 @@ function NoticeDetailed() {
           setInputMemo(responseData.schedule.memo); // 메모 처리
          }
       } catch (error) {
+        setInputTitle('');
+        setInputTitle('PROJECT4 Announcement');
+        receivedHTML = '';
+        receivedHTML = '<ul><li><strong>The deadline: 2023-12-09</strong></li><li><span style="color: rgb(0,0,0);font-size: medium;font-family: Arial;"><strong>in your final report, please include the result of UML modeling</strong></span></li><li><span style="color: rgb(0,0,0);font-size: medium;font-family: AppleSDGothicNeoM00;">If </span><span style="color: rgb(0,0,0);background-color: rgb(247,218,100);font-size: medium;font-family: AppleSDGothicNeoM00;">your team size is one</span><span style="color: rgb(0,0,0);font-size: medium;font-family: AppleSDGothicNeoM00;"> (meaning you are the only student in your team or you did not register a team), you are supposed to do project 1, 2, and 3 as individual project (no report, no presentation). In this case, however, you are supposed to do project 4 as team project, which means you should submit report and presentation video file (.mp4) as well as source code for project 4.</span></li><li>#Notice</li></ul>';
+        const blocksFromHtml = htmlToDraft(receivedHTML);
+        if (blocksFromHtml) {
+          const { contentBlocks, entityMap } = blocksFromHtml;
+
+          const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+
+          const editorState = EditorState.createWithContent(contentState);
+          setEditorState(editorState);
+      
+         }
+        //setQnaFile(null);
+        //setQnaFile({ id: 1, value: 'Project4_announcement.pdf', url: 'https://example.com/Project4_announcement.pdf' },
+        //{ id: 2, value: 'Introduction of UML.txt', url: 'https://example.com/Introduction of UML.txt' });
+        //setInputDay
         // 에러 처리
+
+        setInputDay('2023-12-10')
+        setInputMemo('This is the deadline of PROJ4')
         console.error(error);
+        
       }
     };
 
