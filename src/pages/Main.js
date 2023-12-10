@@ -61,7 +61,14 @@ const Main= ()=> {
     try{
        const ScheduleData = await getMainData('/api/schedule');
         setScheduleDiv(ScheduleData);
-       console.log(ScheduleData);
+        console.log(ScheduleData);
+        // const calendarEvents = Object.entries(scheduleDiv).reduce((result, [date, eventsList]) => {
+        //   const transformedEvents = eventsList.map(({ title }) => ({ title :title, date: date }));
+        //   result.push(...transformedEvents);
+        //   return result;
+        // }, []);
+        // console.log(calendarEvents)
+        // setresced(calendarEvents);
         
     }catch(error){
         console.log(error);
@@ -79,6 +86,16 @@ const Main= ()=> {
         console.log(error);
     }
   }
+
+  useEffect(() => {
+    // Use this effect to update resced when scheduleDiv changes
+    const calendarEvents = Object.entries(scheduleDiv).reduce((result, [date, eventsList]) => {
+      const transformedEvents = eventsList.map(({ title }) => ({ title: title, date: date }));
+      result.push(...transformedEvents);
+      return result;
+    }, []);
+    setresced(calendarEvents);
+  }, [scheduleDiv]);
 
   useEffect(()=>{
 
@@ -98,14 +115,7 @@ const Main= ()=> {
       }
       try{
         handleScedule();
-        const calendarEvents = Object.entries(scheduleDiv).reduce((result, [date, eventsList]) => {
-          const transformedEvents = eventsList.map(({ title }) => ({ title :title, date: date }));
-          result.push(...transformedEvents);
-          return result;
-        }, []);
-        
-        console.log(calendarEvents)
-        setresced(calendarEvents);
+
       }catch(error){
         console.log(error);
       }
@@ -125,9 +135,10 @@ const Main= ()=> {
     {isDropdownView !== null && <Dropdown 
       x={curX} 
       y={curY} 
-      eventsArray={events[isDropdownView] || []}
+      eventsArray={scheduleDiv[isDropdownView] || []}
       setDropdownView={setDropdownView}
-    /> }    
+    /> 
+    }    
     <Container>
       {isAdmin ? (<Login onClick={
         ()=>{window.location.href=`/login`}
