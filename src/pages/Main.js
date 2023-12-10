@@ -209,7 +209,7 @@ const Main= ()=> {
                    {          
             Array.isArray(resourceDiv) ? (
               resourceDiv.map((resource, index) => {
-                return<Resource title={resource.title} content={resource.contents}></Resource>
+                return<Resource title={resource.title} content={resource.contents} noticeId={resource.noticeId}></Resource>
               })            
             ): null
           }

@@ -1,9 +1,12 @@
 import React from 'react'
 import styled from 'styled-components';
 
-const Resource = ({title,content}) => {
+const Resource = ({title,content, noticeId
+}) => {
   return (
-    <HoverDiv>
+    <HoverDiv onClick={()=>{
+      window.location.href=`/notice/${noticeId}`
+    }}>
         <Title>
             {title}
         </Title>
