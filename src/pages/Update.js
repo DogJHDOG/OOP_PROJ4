@@ -42,6 +42,8 @@ function CreatePage() {
 
   //const [marketing, setMarketing] = React.useState(false);
 
+  const [fileList, setFileList] = useState([]);
+  const [selectedFile, setSelectedFile] = useState('');
 
   //처음에 true 로딩이 다 됬을때 false
   const isLoading = false;
@@ -124,6 +126,22 @@ function CreatePage() {
     setInputFile(selectedFile);
   };
 
+  const handleDeleteFile = async () => {
+    try {
+      // Assuming you have an API endpoint to delete a file by filename
+      await axios.delete(`https://oop.cien.or.kr/api/notice/file/${selectedFile}`);
+  
+      // Update the file list after deletion
+      const updatedFileList = fileList.filter((file) => file.filename !== selectedFile);
+      setFileList(updatedFileList);
+  
+      // Clear the selected file
+      setSelectedFile('');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -136,7 +154,29 @@ function CreatePage() {
       //console.log(state);
       try {
         const { responseUpdateData, getId } = location.state;
+
         setPageId(getId);
+
+        const fileUrl = `https://oop.cien.or.kr/api/notice/file/${getId}`;
+        console.log(fileUrl)
+
+        const getDetailNotice = async () => {
+        try {
+          const fileResponse = await axios.get(fileUrl)
+
+          //console.log(response.data);
+          console.log(fileResponse.data);
+          console.log(fileResponse.data);
+
+          setFileList(fileResponse.data);
+
+        } catch (error) {
+          console.log(error);
+        }
+
+
+      };
+      getDetailNotice();
 
         console.log(responseUpdateData);
         
@@ -256,6 +296,7 @@ function CreatePage() {
       formData.append("tagName", tagName);
       formData.append("memo", inputMemo);
       formData.append("time", inputDay);
+      formData.append("checked", '');
 
       if (inputFile !== null) {
         for (let i = 0; i < inputFile.length; i++) {
@@ -268,6 +309,7 @@ function CreatePage() {
       formData.append("contents", convertedContent);
       formData.append("isCalendar", calenderMemo);
       formData.append("tagName", tagName);
+      formData.append("checked", '');
       //formData.append("memo", inputMemo);
       //formData.append("time", inputDay);
       if (inputFile !== null) {
@@ -279,8 +321,8 @@ function CreatePage() {
     
     try {
       
-      const response = await axios.post(
-        'https://oop.cien.or.kr/api/notice',
+      const response = await axios.put(
+        `https://oop.cien.or.kr/api/notice/${pageId}`,
         formData, {
           headers: {headers},
         }
@@ -468,6 +510,7 @@ function CreatePage() {
       /></div>
 
       <Border>
+      
       <div className='File'>
       <input type="file" id="fileUpload"
         multiple={true}
@@ -477,7 +520,12 @@ function CreatePage() {
                 padding: '1rem'}}
 
         
-        ></input></div>
+        ></input>
+        
+        
+        </div>
+
+      
 
       <div className='Tags'>
       <Checkbox 
