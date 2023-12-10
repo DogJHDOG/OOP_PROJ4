@@ -3,18 +3,33 @@ import styled from 'styled-components';
 
 const Resource = ({title,content}) => {
   return (
-    <div>
+    <HoverDiv>
         <Title>
             {title}
         </Title>
         <Content>
             <div dangerouslySetInnerHTML={{ __html: content }}/>
         </Content>
-    </div>
+    </HoverDiv>
   )
 }
 
 export default Resource
+
+
+
+const HoverDiv = styled.div`
+  width: 100%;
+  height: auto;
+  background-color: #F8F9FA; 
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition: background-color 0.3s ease-in-out;
+  &:hover {
+    background-color: #bdc3c7; /* 연한 회색으로 변경 */
+  }
+`;
 
 
 const Title = styled.div`
