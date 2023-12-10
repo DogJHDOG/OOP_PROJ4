@@ -191,8 +191,12 @@ function CreatePage() {
     //console.log('Notice Tag: ', notice);
     //console.log('Resource Tag: ', resource);
 
+
+    const formData = new FormData();
+
+
     let tagName = null;
-    let createData = null;
+    //let createData = null;
 
     if (notice === true) {
       tagName = 'Notice'
@@ -200,33 +204,49 @@ function CreatePage() {
       tagName = 'Resource'
     }
     
+    const headers = {};
+
+    if (inputFile !== null && inputFile.length > 0) {
+      headers['Content-Type'] = 'multipart/form-data';
+    }
+
     if (calenderMemo === true) {
-      createData = {
-        title: inputTitle,
-        contents: convertedContent,
-        isCalendar: calenderMemo,
-        tagName: tagName,
-        memo: inputMemo,
-        time: inputDay
+      formData.append("title", inputTitle);
+      formData.append("contents", convertedContent);
+      formData.append("isCalendar", calenderMemo);
+      formData.append("tagName", tagName);
+      formData.append("memo", inputMemo);
+      formData.append("time", inputDay);
+
+      if (inputFile !== null) {
+        for (let i = 0; i < inputFile.length; i++) {
+          formData.append("files", inputFile[i]);
+        }
       }
+      
     } else if (calenderMemo === false) {
-      createData = {
-        title: inputTitle,
-        contents: convertedContent,
-        isCalendar: calenderMemo,
-        tagName: tagName,
-        //memo: inputMemo,
-        //time: inputDay
+      formData.append("title", inputTitle);
+      formData.append("contents", convertedContent);
+      formData.append("isCalendar", calenderMemo);
+      formData.append("tagName", tagName);
+      //formData.append("memo", inputMemo);
+      //formData.append("time", inputDay);
+      if (inputFile !== null) {
+        for (let i = 0; i < inputFile.length; i++) {
+          formData.append("files", inputFile[i]);
+        }
       }
     }
     
-
     try {
-      const response = await axios.put(
-        `https://oop.cien.or.kr/api/notice/${pageId}`,
-        createData
+      
+      const response = await axios.post(
+        'https://oop.cien.or.kr/api/notice',
+        formData, {
+          headers: {headers},
+        }
       );
-  
+      console.log([...formData.entries()]);
       console.log('응답:', response.data);
       // 성공적인 경우 처리, 예를 들어 다른 페이지로 리다이렉트
       navigate('/');
