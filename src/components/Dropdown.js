@@ -13,7 +13,11 @@ const Dropdown = ({ x, y, eventsArray, setDropdownView }) => {
           <CalDiv key={i} onClick={() =>window.location.href=`/notice/${event.noticeId}` }>
             <div>
               <div>{`Title: ${event.title}`}</div>
-              <div>{`Memo: ${event.schedule.memo}`}</div>
+              <div>
+            {event.schedule.memo !== 'null'
+              ? `Memo: ${event.schedule.memo}`
+              : 'Memo: 없음'}
+            </div>  
             </div>
           </CalDiv>
         ))}
