@@ -224,10 +224,10 @@ const Main= ()=> {
               })            
             ): null
           }
-          <Resource title={'Ch01'} content={'About the ch01 lecture'}></Resource>
-          <Resource title={'Ch02'} content={'About the ch02 lecture'}></Resource>
+          {/* <Resource title={'Ch01'} content={'About the ch01 lecture'}></Resource> */}
+          {/* <Resource title={'Ch02'} content={'About the ch02 lecture'}></Resource>
           <Resource title={'Ch03'} content={'About the ch03 lecture'}></Resource>
-          <Resource title={'Ch04'} content={'About the ch04 lecture'}></Resource>
+          <Resource title={'Ch04'} content={'About the ch04 lecture'}></Resource> */}
         </Lecturediv>
       </Underdiv>
     </Container>
