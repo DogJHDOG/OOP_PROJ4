@@ -134,8 +134,9 @@ function CreatePage() {
       
      // const state = location;
       //console.log(state);
-      const { responseUpdateData, getId } = location.state;
-      setPageId(getId);
+      try {
+        const { responseUpdateData, getId } = location.state;
+        setPageId(getId);
 
         console.log(responseUpdateData);
         
@@ -168,7 +169,45 @@ function CreatePage() {
          }
          else {
           setCalenderMemo(false);
+         }  
+      } catch (error) {
+        setInputTitle('PROJECT4 Announcement'); // 제목 처리
+        receivedHTML = '<ul><li><strong>The deadline: 2023-12-09</strong></li><li><span style="color: rgb(0,0,0);font-size: medium;font-family: Arial;"><strong>in your final report, please include the result of UML modeling</strong></span></li><li><span style="color: rgb(0,0,0);font-size: medium;font-family: AppleSDGothicNeoM00;">If </span><span style="color: rgb(0,0,0);background-color: rgb(247,218,100);font-size: medium;font-family: AppleSDGothicNeoM00;">your team size is one</span><span style="color: rgb(0,0,0);font-size: medium;font-family: AppleSDGothicNeoM00;"> (meaning you are the only student in your team or you did not register a team), you are supposed to do project 1, 2, and 3 as individual project (no report, no presentation). In this case, however, you are supposed to do project 4 as team project, which means you should submit report and presentation video file (.mp4) as well as source code for project 4.</span></li><li>#Notice</li></ul>';
+        const blocksFromHtml = htmlToDraft(receivedHTML);
+        if (blocksFromHtml) {
+          const { contentBlocks, entityMap } = blocksFromHtml;
+
+          const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+
+          const editorState = EditorState.createWithContent(contentState);
+          setEditorState(editorState);
+      
          }
+
+         // 파일 처리 부분 (추가 필요)
+         /*
+         if (responseUpdateData.tagName === 'Notice') {
+          setNotice(true);
+         } else if (responseUpdateData.tagName === 'Resource') {
+          setResource(true);
+         }*/
+
+         setNotice(true);
+
+         /*
+         if (responseUpdateData.isCalendar === true) {
+          setCalenderMemo(true);
+          setInputDay(responseUpdateData.schedule.time); // 시간 처리
+          setInputMemo(responseUpdateData.schedule.memo); // 메모 처리
+         }
+         else {
+          setCalenderMemo(false);
+         }*/
+         setCalenderMemo(true);
+         setInputDay('2023-12-10');
+         setInputMemo('This is the deadline of PROJ4'); 
+      }
+      
          
     };
 
