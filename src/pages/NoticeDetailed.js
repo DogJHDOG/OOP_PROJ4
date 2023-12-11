@@ -15,6 +15,7 @@ function NoticeDetailed() {
   
   //const fileOptionRef = useRef([]);
   const fileIdRef = useRef(1); // fileId를 useRef로 관리
+  //const fileOptionRef = useRef([]);
 
   //const [marketing, setMarketing] = React.useState(false);
 
@@ -66,12 +67,10 @@ function NoticeDetailed() {
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
-  let file = null;
   
   useEffect(() => {
     
     //let fileId = 1;
-
 
     let receivedHTML = '';
 
@@ -108,7 +107,6 @@ function NoticeDetailed() {
         console.log(responseData);
         console.log(fileData);
 
-        file = fileData;
 
         const fileCount = Object.keys(fileData).length;
         console.log(fileCount);  // 예상 출력: 3
@@ -128,6 +126,7 @@ function NoticeDetailed() {
         }));
 
         setFileOption(updatedFileOption);
+        //setFileOption(updatedFileOption);
         /*
         for (let i = 0; i < Object.keys(fileData).length; i++) {
           setQnaFile(prevQnaFile => [
@@ -138,7 +137,7 @@ function NoticeDetailed() {
         }*/
         
 
-        console.log(fileOption);
+        //console.log(fileOption);
 
         setResponseUpdateDate(responseData);
 
@@ -212,8 +211,8 @@ function NoticeDetailed() {
   const handleNavigate = () => {
     //console.log(responseUpdateData);
     //console.log(getId);
-    console.log(file);
-    navigate('/Update', { state: { responseUpdateData, getId, file } });
+    //console.log(file);
+    navigate('/Update', { state: { responseUpdateData, getId } });
   };
 
   const handleFileChange = (selected) => {
@@ -227,6 +226,7 @@ function NoticeDetailed() {
 
       // Set the selected file's URL
       setSelectedFileUrl(selectedFile.url);
+      //console.log(selectedFileUrl);
     }
   };
 
@@ -310,7 +310,8 @@ function NoticeDetailed() {
         <SelectedFileUrl>
               {selectedFileUrl && (
                 <p>
-                  <strong style={{marginRight: '0.3rem'}}>Selected File URL:</strong> <a href={selectedFileUrl} download>download</a>
+                  <strong style={{marginRight: '0.3rem'}}>Selected File:</strong> <a href={selectedFileUrl} 
+                  download="download.pdf">download</a>
                   
                 </p>
               )}
