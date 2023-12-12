@@ -124,23 +124,23 @@ function CreatePage() {
     const selectedFile = [...fileinput.files];
     //console.log(selectedFile);
     setInputFile(selectedFile);
-  };
+   };
 
-  const handleDeleteFile = async () => {
-    try {
-      // Assuming you have an API endpoint to delete a file by filename
-      await axios.delete(`https://oop.cien.or.kr/api/notice/file/${selectedFile}`);
+  // const handleDeleteFile = async () => {
+  //   try {
+  //     // Assuming you have an API endpoint to delete a file by filename
+  //     await axios.delete(`https://oop.cien.or.kr/api/notice/file/${selectedFile}`);
   
-      // Update the file list after deletion
-      const updatedFileList = fileList.filter((file) => file.filename !== selectedFile);
-      setFileList(updatedFileList);
+  //     // Update the file list after deletion
+  //     const updatedFileList = fileList.filter((file) => file.filename !== selectedFile);
+  //     setFileList(updatedFileList);
   
-      // Clear the selected file
-      setSelectedFile('');
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     // Clear the selected file
+  //     setSelectedFile('');
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const navigate = useNavigate();
   const location = useLocation();

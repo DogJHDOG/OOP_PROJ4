@@ -9,28 +9,7 @@ import 'tippy.js/themes/light.css';
 import Dropdown from '../components/Dropdown';
 import { getMainData } from '../apis/Axios';
 import Resource from '../components/Resource';
-import axios from 'axios';
 import { notice } from '../const';
-
-
-var events ={
-  
-  '2023-12-20':[            
-  { title: '기말고사 시험1', date: '2023-12-20' ,memo:'a',noticeId:'1'},
-  { title: '기말고사 시험2', date: '2023-12-20' ,memo:'a',noticeId:'2'},
-  { title: '기말고사 시험3', date: '2023-12-20' ,memo:'a',noticeId:'3'},
-  { title: '기말고사 시험4', date: '2023-12-20' ,memo:'a',noticeId:'4'},
-  { title: '기말고사 시험', date: '2023-12-20' ,memo:'a',noticeId:'5'},
-  ],
-  '2023-12-09':[
-    {title:'PROJECT4 Announcement' ,date:'2023-12-09',memo:'과제 열심히 하세요 ..',noticeId:'6'},
-    {title:'PROJECT4 Announcement' ,date:'2023-12-09',memo:'과제 열심히 하세요 ..',noticeId:'7'},
-    {title:'PROJECT4 Announcement' ,date:'2023-12-09',memo:'과제 열심히 하세요 ..',noticeId:'8'},
-    {title:'PROJECT4 Announcement' ,date:'2023-12-09',memo:'과제 열심히 하세요 ..',noticeId:'9'},
-
-  ]
-  
-}
 
 
 const Main= ()=> {
