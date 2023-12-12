@@ -25,6 +25,11 @@ function NoticeDetailed() {
   //content가 제대로 왔을때 false, content가 제대로 오지 않았을때 true
   const isWrong = false;
 
+  const [isUpdate,setIsUpdate] = useState(false);
+  const [isDelete,setIsDelete] = useState(false);
+  //const [isAdmin, setIsAdmin] = useState(false);
+
+
 
   const focusEditor = () => {
     if (editorRef.current) {
@@ -69,7 +74,18 @@ function NoticeDetailed() {
 
   
   useEffect(() => {
-    
+    const name = window.localStorage.getItem('admin');
+    if (name === '1234') {
+      console.log(1);
+      //setIsAdmin(true);
+      setIsUpdate(true);
+      setIsDelete(true);
+    }
+    else {
+      //setIsAdmin(false);
+      setIsUpdate(false);
+      setIsDelete(false);
+    }
     //let fileId = 1;
 
     let receivedHTML = '';
@@ -356,6 +372,8 @@ function NoticeDetailed() {
       <Container>
       <Title3>
       <Border2>
+        {
+          isUpdate ? 
         <div className='WholeButton'
         style={{
           alignContent: 'flex-end',
@@ -370,20 +388,22 @@ function NoticeDetailed() {
         handleNavigate(); 
   
         //sendTextToEditor("#Notice");  
-      }}>Update</StyledButton> </div>
+      }}>Update</StyledButton> </div> : <div></div> }
       
   
-     
+      {isDelete ? 
       <div className='WholeButton'>
       <StyledButton2 type='submit' 
-      
       onClick={(event) => {
         alert("Delete the notice");
         deletingNotice();
         event.preventDefault();
         navigate('/');
         //sendTextToEditor("#Notice");  
-      }}>Delete</StyledButton2></div>
+      }}>Delete</StyledButton2></div> : <div></div>}
+
+
+
       </Border2></Title3></Container>
       
       
