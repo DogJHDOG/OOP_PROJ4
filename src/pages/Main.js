@@ -30,7 +30,7 @@ const Main= ()=> {
   const [curX, setCurX] = useState(0);
   const [curY, setCurY] = useState(0);
   //useState로 나중에 넣기, admin임이 확인되면 생기는 버튼에 대한 처리
-  const [isAdmin,setIsAdmin] = useState(true);
+  const [isAdmin,setIsAdmin] = useState(false);
 
   let clickX = 0;
   let clickY = 0;
