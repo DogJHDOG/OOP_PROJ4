@@ -23,6 +23,7 @@ const Main= ()=> {
   const [isDropdownView, setDropdownView] = useState(null);
   const [scheduleDiv, setScheduleDiv] = useState([]);
   const [resced, setresced] = useState([]);
+  const [isLoading,setIsLoading] = useState(true);
 
   const [noticeDiv, setNoticeDiv] = useState([]);
   const [resourceDiv, setResourceDiv] = useState([]);
@@ -48,7 +49,7 @@ const Main= ()=> {
         // }, []);
         // console.log(calendarEvents)
         // setresced(calendarEvents);
-        
+        setIsLoading(false);
     }catch(error){
         console.log(error);
     }
@@ -110,6 +111,7 @@ const Main= ()=> {
   },[])
 
   return (
+    isLoading ? <div> 로딩중..!</div> :
     <div>
     {isDropdownView !== null && <Dropdown 
       x={curX} 
