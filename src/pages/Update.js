@@ -42,8 +42,13 @@ function CreatePage() {
 
   //const [marketing, setMarketing] = React.useState(false);
 
-  const [fileList, setFileList] = useState([]);
-  const [selectedFile, setSelectedFile] = useState('');
+  //const [fileList, setFileList] = useState([]);
+
+  
+
+  //const [selectedFile, setSelectedFile] = useState('');
+
+
 
   //처음에 true 로딩이 다 됬을때 false
   const isLoading = false;
@@ -168,7 +173,7 @@ function CreatePage() {
           console.log(fileResponse.data);
           console.log(fileResponse.data);
 
-          setFileList(fileResponse.data);
+          //setFileList(fileResponse.data);
 
         } catch (error) {
           console.log(error);
